@@ -1,0 +1,21 @@
+{
+  "on_splash_title_one" : "Task Management &\nTo-Do List",
+  "on_splash_title_two" : "This productive tool is designed to help\nyou better manage your task \nproject-wise conveniently!",
+  "let_start" : "Let’s Start",
+  "login":  "Login",
+  "password": "Password",
+  "did_not_have_account": "Didn’t have any account?",
+  "sign_up_here": "Sign Up Here",
+  "sign_in": "Sign In",
+  "enter_valid_phone": "Please enter a valid phone number",
+  "already_have_account":  "Already have any account?",
+  "sign_up": "Sign Up",
+  "name": "Name",
+  "years_of_experience": "Experience years",
+  "choose_experience": "Experience level",
+  "address": "Address",
+  "choose_year": "Choose your experience years",
+  "choose_level": "Choose your experience level",
+  "phone_number_exists": "An account with this phone number already exists.",
+  "invalid_password_or_email" : "Invalid email or password. Please try again."
+}
