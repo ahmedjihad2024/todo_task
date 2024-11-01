@@ -20,6 +20,7 @@ import '../../../common/toast.dart';
 import '../../../res/assets_manager.dart';
 import 'package:responsive_ui/responsive_ui.dart';
 
+import '../../../res/routes_manager.dart';
 import '../../../res/translations_manager.dart';
 
 class SignUpView extends StatefulWidget {
@@ -130,7 +131,8 @@ class _SignUpViewState extends State<SignUpView> {
                 timeInSec: 5);
           } else if (state.reqState == ReqState.success) {
             overlayLoading.hideLoading();
-            // TODO: nav to home
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                RoutesManager.home.route, (_) => false);
           } else if (state.reqState == ReqState.loading) {
             overlayLoading.showLoading();
           }

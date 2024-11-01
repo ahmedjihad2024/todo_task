@@ -21,7 +21,26 @@ enum Translation{
   choose_year,
   choose_level,
   phone_number_exists,
-  invalid_password_or_email
+  invalid_password_or_email,
+  my_tasks,
+  all,
+  inprogress,
+  waiting,
+  finished,
+  medium,
+  low,
+  high,
+  add_new_task,
+  add_image,
+  task_title,
+  task_description,
+  enter_title_here,
+  enter_description_here,
+  priority,
+  due_date,
+  choose_due_date,
+  add_task,
+  choose_image
 }
 
 extension Tra on Translation{

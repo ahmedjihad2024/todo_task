@@ -38,5 +38,9 @@ class RegisterDetails {
         required this.userName,
         required this.accessToken,
         required this.refreshToken});
+}
 
+class TaskId{
+  final String? id;
+  TaskId({required this.id});
 }

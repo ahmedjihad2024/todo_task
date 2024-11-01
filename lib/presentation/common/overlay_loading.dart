@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:todo_task/presentation/res/color_manager.dart';
 
@@ -6,20 +8,24 @@ class OverlayLoading {
   OverlayEntry? overlayEntry;
   late Future<void> Function() _hideFunction;
 
-  OverlayLoading(this._context,);
-
-  void showLoading() {
-    if (overlayEntry != null) return;
+  OverlayLoading(this._context,){
     overlayEntry = OverlayEntry(
         builder: (con) => Theme(
             data: Theme.of(_context),
             child: RegisterLoading(overlayLoading: this)));
+  }
+
+  void showLoading() {
     Overlay.of(_context).insert(overlayEntry!);
   }
 
   Future<void> hideLoading() async {
-    await _hideFunction();
-    overlayEntry = null;
+    Timer.periodic(const Duration(milliseconds: 100), (t) async{
+      try{
+        await _hideFunction();
+        t.cancel();
+      }catch(e){}
+    });
   }
 
   void setHideFunction(Future<void> Function() fun) => _hideFunction = fun;

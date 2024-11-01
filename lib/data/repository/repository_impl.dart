@@ -7,6 +7,7 @@ import 'package:todo_task/data/mapper/mapper.dart';
 import 'package:todo_task/data/network/error_handler/error_handler.dart';
 import 'package:todo_task/data/network/error_handler/failure.dart';
 import 'package:todo_task/data/network/internet_checker.dart';
+import 'package:todo_task/data/responses/responses.dart';
 import 'package:todo_task/domain/model/models.dart';
 import 'package:todo_task/domain/repository/repository.dart';
 
@@ -51,6 +52,20 @@ class Repository implements RepositoryAbs{
     if(await _networkConnectivity.isConnected){
       try{
         var response = await _dataSource.signIn(request);
+        return Right(response.toDomain);
+      }on Exception catch(e){
+        return Left(e.handle);
+      }
+    }else{
+      return const Left(NoInternetConnection());
+    }
+  }
+
+  @override
+  Future<Either<Failure, TaskId>> addTask(AddTaskRequest request) async {
+    if(await _networkConnectivity.isConnected){
+      try{
+        var response = await _dataSource.addTask(request);
         return Right(response.toDomain);
       }on Exception catch(e){
         return Left(e.handle);

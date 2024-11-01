@@ -7,6 +7,8 @@ import 'package:todo_task/data/repository/repository_impl.dart';
 import 'package:todo_task/data/request/request.dart';
 import 'package:todo_task/domain/usecase/log_in_usecase.dart';
 
+import '../../../../app/app_preferences.dart';
+import '../../../../app/dependency_injection.dart';
 import '../../../../data/network/error_handler/failure.dart';
 import '../../../../domain/model/models.dart';
 import '../../../common/state_render.dart';
@@ -32,14 +34,21 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Either<Failure, RegisterDetails> response =
         await _loginUsecase.execute(LoginRequest(event.phone, event.password));
     response.fold((left) {
-      emit(state.copy(
-          reqState: ReqState.error, errorMessage: left.userMessage));
+      emit(
+          state.copy(reqState: ReqState.error, errorMessage: left.userMessage));
     }, (right) {
-      // if(right.accessToken.isNotEmpty){
-      //   await instance<AppPreferences>().setAccessToken(right.accessToken);
-      // await instance<AppPreferences>().setRefreshToken(right.refreshToken);
-      // }
-      emit(state.copy(reqState: ReqState.success));
+      if (right.accessToken.isNotEmpty && right.refreshToken.isNotEmpty) {
+        _saveTokens(
+            right.accessToken,
+            right.refreshToken
+        );
+        emit(state.copy(reqState: ReqState.success));
+      }
     });
+  }
+
+  Future<void> _saveTokens(String accessToken, String refreshToken) async {
+    await instance<AppPreferences>().setAccessToken(accessToken);
+    await instance<AppPreferences>().setRefreshToken(refreshToken);
   }
 }

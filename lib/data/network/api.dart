@@ -1,6 +1,10 @@
 
 
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:todo_task/app/app_preferences.dart';
+import 'package:todo_task/app/dependency_injection.dart';
 import 'package:todo_task/data/responses/responses.dart';
 
 import '../request/request.dart';
@@ -13,6 +17,8 @@ abstract class AppServicesClientAbs{
   Future<ArticlesResponse> getArticles(ArticleRequest articleRequest);
   Future<RegisterDetailsResponse> login(String phone,String password);
   Future<RegisterDetailsResponse> signIn(RegisterRequest request);
+  Future<UploadedImageResponse> uploadImage(File file);
+  Future<TaskIdResponse> addTask(AddTaskRequest request);
 }
 
 class AppServices implements AppServicesClientAbs{
@@ -50,5 +56,43 @@ class AppServices implements AppServicesClientAbs{
           "level" : request.level
         });
     return RegisterDetailsResponse.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  @override
+  Future<UploadedImageResponse> uploadImage(File file) async {
+    Response response = await _dio.request(
+        "upload/image",
+        method: RequestMethod.POST,
+        headers: {
+          "Authorization" : "Bearer ${instance<AppPreferences>().accessToken}",
+          "Content-Type": "multipart/form-data"
+        },
+        body: FormData.fromMap({
+          'image': await MultipartFile.fromFile(file.path, contentType: DioMediaType.parse('image/jpeg')),
+        })
+    );
+    return UploadedImageResponse.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  @override
+  Future<TaskIdResponse> addTask(AddTaskRequest request) async {
+
+    var result = await uploadImage(request.image);
+
+    Response response =
+        await _dio.request(
+        "todos",
+        method: RequestMethod.POST,
+        headers: {
+          "Authorization" : "Bearer ${instance<AppPreferences>().accessToken}",
+        },
+        body: {
+          "image"  : result.image,
+          "title" : request.title,
+          "desc" : request.description,
+          "priority" : request.priority,
+          "dueDate" : request.dueDate
+        });
+    return TaskIdResponse.fromJson(response.data as Map<String, dynamic>);
   }
 }

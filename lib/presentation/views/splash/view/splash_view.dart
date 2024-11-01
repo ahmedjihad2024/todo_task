@@ -68,6 +68,8 @@ class _SplashViewState extends State<SplashView> with AfterLayout {
 
       if (instance<AppPreferences>().isSkippedOnBoarding) {
         // TODO: nav to home or login
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            RoutesManager.login.route, (_) => false);
       } else {
         Navigator.of(context).pushNamedAndRemoveUntil(
             RoutesManager.onBoarding.route, (_) => false);

@@ -13,6 +13,8 @@ import 'package:todo_task/presentation/views/on_boarding/view/widgets/on_boardin
 import 'package:todo_task/presentation/views/on_boarding/view/widgets/on_boarding_windows_style.dart';
 import 'package:window_manager/window_manager.dart';
 
+import '../../../../app/app_preferences.dart';
+import '../../../../app/dependency_injection.dart';
 import '../../../res/routes_manager.dart';
 
 class OnBoardingView extends StatefulWidget {
@@ -28,8 +30,8 @@ class _OnBoardingViewState extends State<OnBoardingView> with AfterLayout {
   @override
   void initState() {
     super.initState();
-    onClick = (){
-      // await instance<AppPreferences>().setSkippedOnBoarding();
+    onClick = () async {
+      await instance<AppPreferences>().setSkippedOnBoarding();
       Navigator.of(context).pushNamedAndRemoveUntil(
           RoutesManager.login.route, (_) => false);
     };

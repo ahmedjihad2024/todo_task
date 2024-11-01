@@ -15,9 +15,28 @@ class RegisterDetailsResponse {
 
   factory RegisterDetailsResponse.fromJson(Map<String, dynamic> json) {
     return RegisterDetailsResponse(
-        id: json["id"],
+        id: json["_id"],
         userName: json["userName"],
         accessToken: json["access_token"],
-        refreshToken: json["token"]);
+        refreshToken: json["refresh_token"]);
+  }
+}
+
+
+class UploadedImageResponse{
+  final String image;
+  UploadedImageResponse(this.image);
+
+  factory UploadedImageResponse.fromJson(Map<String, dynamic> json) {
+    return UploadedImageResponse(json["image"]);
+  }
+}
+
+class TaskIdResponse{
+  final String? id;
+  TaskIdResponse({required this.id});
+
+  factory TaskIdResponse.fromJson(Map<String, dynamic> json) {
+    return TaskIdResponse(id: json["_id"]);
   }
 }

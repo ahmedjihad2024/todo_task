@@ -7,6 +7,7 @@ abstract class DataSourceAbs{
   Future<ArticlesResponse> getArticles(ArticleRequest articleRequest);
   Future<RegisterDetailsResponse> login(String phone,String password);
   Future<RegisterDetailsResponse> signIn(RegisterRequest request);
+  Future<TaskIdResponse> addTask(AddTaskRequest request);
 }
 
 class DataSource implements DataSourceAbs{
@@ -22,5 +23,8 @@ class DataSource implements DataSourceAbs{
 
   @override
   Future<RegisterDetailsResponse> signIn(RegisterRequest request) async => await appServices.signIn(request);
+
+  @override
+  Future<TaskIdResponse> addTask(AddTaskRequest request) async => await appServices.addTask(request);
 
 }

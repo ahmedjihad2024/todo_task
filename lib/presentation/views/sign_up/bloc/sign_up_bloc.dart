@@ -44,16 +44,21 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
           event.phone
         ));
     response.fold((left) {
-      print(left.userMessage);
       emit(state.copy(
           reqState: ReqState.error, errorMessage: left.userMessage));
-    }, (right) async {
-      // if(right.accessToken.isNotEmpty){
-      //   await instance<AppPreferences>().setAccessToken(right.accessToken);
-      //   await instance<AppPreferences>().setRefreshToken(right.refreshToken);
-      // }
-      emit(state.copy(reqState: ReqState.success));
+    }, (right) {
+      if (right.accessToken.isNotEmpty && right.refreshToken.isNotEmpty) {
+        _saveTokens(
+            right.accessToken,
+            right.refreshToken
+        );
+        emit(state.copy(reqState: ReqState.success));
+      }
     });
   }
 
+  Future<void> _saveTokens(String accessToken, String refreshToken) async {
+    await instance<AppPreferences>().setAccessToken(accessToken);
+    await instance<AppPreferences>().setRefreshToken(refreshToken);
+  }
 }

@@ -80,13 +80,14 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+
     overlayLoading = OverlayLoading(context);
 
     return Scaffold(
       backgroundColor: context.theme.scaffoldBackgroundColor,
       body: BlocConsumer<LoginBloc, LoginState>(
         buildWhen: (_, __) => false,
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state.errorMessage != null && state.reqState == ReqState.error) {
             overlayLoading.hideLoading();
             showToast(
@@ -96,7 +97,8 @@ class _LoginViewState extends State<LoginView> {
                 timeInSec: 5);
           } else if (state.reqState == ReqState.success) {
             overlayLoading.hideLoading();
-            // TODO: nav to home
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                RoutesManager.home.route, (_) => false);
           } else if (state.reqState == ReqState.loading) {
             overlayLoading.showLoading();
           }

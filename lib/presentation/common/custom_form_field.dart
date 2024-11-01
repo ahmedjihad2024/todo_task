@@ -65,6 +65,7 @@ class NiceTextForm extends StatefulWidget {
   final Function(String)? onTextChanged;
   final Alignment alignment;
   final bool showCountryCode;
+  final TextInputAction? textInputAction;
 
   const NiceTextForm({super.key,
     this.height,
@@ -83,6 +84,7 @@ class NiceTextForm extends StatefulWidget {
     this.focusNode,
     this.validator,
     this.validatorStyle,
+    this.textInputAction,
     this.obscureText = null,
     this.label,
     this.boxDecoration,
@@ -284,6 +286,7 @@ class _NiceTextFormState extends State<NiceTextForm> with AfterLayout {
                       child: TextFormField(
                         style: widget.textStyle,
                         focusNode: focusNode,
+                        textInputAction: widget.textInputAction,
                         controller: widget.textEditingController,
                         keyboardType: widget.keyboardType,
                         obscureText: widget.obscureText ??

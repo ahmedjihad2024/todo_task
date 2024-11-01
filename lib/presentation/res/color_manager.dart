@@ -9,4 +9,6 @@ class ColorManager{
   static const Color white = Colors.white;
   static const Color red = Colors.red;
   static const Color transparent = Colors.transparent;
+  static const Color orange = Color(0xFFFF7D53);
+  static const Color strongBlue = Color(0xFF0087FF);
 }
