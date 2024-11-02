@@ -22,7 +22,6 @@ class RegisterDetailsResponse {
   }
 }
 
-
 class UploadedImageResponse{
   final String image;
   UploadedImageResponse(this.image);
@@ -32,11 +31,53 @@ class UploadedImageResponse{
   }
 }
 
-class TaskIdResponse{
+class TaskDetailsResponse{
   final String? id;
-  TaskIdResponse({required this.id});
+  final String? image;
+  final String? title;
+  final String? description;
+  final String? priority;
+  final String? status;
+  final String? user;
+  final String? createdAt;
+  final String? updatedAt;
 
-  factory TaskIdResponse.fromJson(Map<String, dynamic> json) {
-    return TaskIdResponse(id: json["_id"]);
+  TaskDetailsResponse(
+      {required this.image,
+        required this.priority,
+        required this.description,
+        required this.title,
+        required this.user,
+        required this.status,
+        required this.createdAt,
+        required this.updatedAt,
+      required this.id});
+
+  factory TaskDetailsResponse.fromJson(Map<String, dynamic> json) {
+    return TaskDetailsResponse(
+      id: json["_id"],
+        image: json["image"],
+        title: json["title"],
+        status: json["status"],
+        priority: json["priority"],
+        user: json["user"],
+        createdAt: json["createdAt"],
+        updatedAt: json["updatedAt"],
+        description: json["desc"]);
+  }
+}
+
+class TasksResponse{
+  List<TaskDetailsResponse> tasksGroup;
+  TasksResponse({
+    required this.tasksGroup
+});
+
+  factory TasksResponse.fromList(List<dynamic> data){
+    List<TaskDetailsResponse> group = [];
+    for(Map<String, dynamic> item in data){
+      group.add(TaskDetailsResponse.fromJson(item));
+    }
+    return TasksResponse(tasksGroup: group);
   }
 }

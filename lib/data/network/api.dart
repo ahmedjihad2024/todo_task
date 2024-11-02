@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -10,89 +8,131 @@ import 'package:todo_task/data/responses/responses.dart';
 import '../request/request.dart';
 import 'dio_factory.dart';
 
+abstract class AppServicesClientAbs {
+  Future<RegisterDetailsResponse> login(String phone, String password);
 
-class ArticlesResponse{}
-
-abstract class AppServicesClientAbs{
-  Future<ArticlesResponse> getArticles(ArticleRequest articleRequest);
-  Future<RegisterDetailsResponse> login(String phone,String password);
   Future<RegisterDetailsResponse> signIn(RegisterRequest request);
+
   Future<UploadedImageResponse> uploadImage(File file);
-  Future<TaskIdResponse> addTask(AddTaskRequest request);
+
+  Future<TaskDetailsResponse> addTask(AddTaskRequest request);
+
+  Future<TasksResponse> getTodos(int page);
+
+  Future<void> deleteTask(String id);
+
+  Future<String> refreshToken();
+
+  Future<TaskDetailsResponse> updateTask(UpdateTaskRequest request);
 }
 
-class AppServices implements AppServicesClientAbs{
+class AppServices implements AppServicesClientAbs {
   DioFactory _dio;
+
   AppServices(this._dio);
 
   @override
-  Future<ArticlesResponse> getArticles(ArticleRequest articleRequest) async {
-    return ArticlesResponse();
-  }
-
-  @override
-  Future<RegisterDetailsResponse> login(String phone,String password) async {
-    Response response = await _dio.request(
-        "auth/login",
+  Future<RegisterDetailsResponse> login(String phone, String password) async {
+    Response response = await _dio.request("auth/login",
         method: RequestMethod.POST,
-        body: {
-          "phone" : phone,
-          "password": password
-        });
-    return RegisterDetailsResponse.fromJson(response.data as Map<String, dynamic>);
+        body: {"phone": phone, "password": password});
+    return RegisterDetailsResponse.fromJson(
+        response.data as Map<String, dynamic>);
   }
 
   @override
   Future<RegisterDetailsResponse> signIn(RegisterRequest request) async {
-    Response response = await _dio.request(
-        "auth/register",
-        method: RequestMethod.POST,
-        body: {
-          "phone" : request.phone,
-          "password" : request.password,
-          "displayName" : request.userName,
-          "experienceYears" : request.experienceYears,
-          "address" : request.address,
-          "level" : request.level
-        });
-    return RegisterDetailsResponse.fromJson(response.data as Map<String, dynamic>);
+    Response response =
+        await _dio.request("auth/register", method: RequestMethod.POST, body: {
+      "phone": request.phone,
+      "password": request.password,
+      "displayName": request.userName,
+      "experienceYears": request.experienceYears,
+      "address": request.address,
+      "level": request.level
+    });
+    return RegisterDetailsResponse.fromJson(
+        response.data as Map<String, dynamic>);
   }
 
   @override
   Future<UploadedImageResponse> uploadImage(File file) async {
-    Response response = await _dio.request(
-        "upload/image",
+    Response response = await _dio.request("upload/image",
         method: RequestMethod.POST,
-        headers: {
-          "Authorization" : "Bearer ${instance<AppPreferences>().accessToken}",
-          "Content-Type": "multipart/form-data"
-        },
+        headers: {"Content-Type": "multipart/form-data"},
         body: FormData.fromMap({
-          'image': await MultipartFile.fromFile(file.path, contentType: DioMediaType.parse('image/jpeg')),
-        })
-    );
-    return UploadedImageResponse.fromJson(response.data as Map<String, dynamic>);
+          'image': await MultipartFile.fromFile(file.path,
+              contentType: DioMediaType.parse('image/jpeg')),
+        }));
+    return UploadedImageResponse.fromJson(
+        response.data as Map<String, dynamic>);
   }
 
   @override
-  Future<TaskIdResponse> addTask(AddTaskRequest request) async {
-
+  Future<TaskDetailsResponse> addTask(AddTaskRequest request) async {
     var result = await uploadImage(request.image);
 
     Response response =
-        await _dio.request(
-        "todos",
-        method: RequestMethod.POST,
-        headers: {
-          "Authorization" : "Bearer ${instance<AppPreferences>().accessToken}",
-        },
-        body: {
-          "image"  : result.image,
-          "title" : request.title,
-          "desc" : request.description,
-          "priority" : request.priority,
-          "dueDate" : request.dueDate
-        });
-    return TaskIdResponse.fromJson(response.data as Map<String, dynamic>);
+        await _dio.request("todos", method: RequestMethod.POST, body: {
+      "image": result.image,
+      "title": request.title,
+      "desc": request.description,
+      "priority": request.priority,
+      "dueDate": request.dueDate
+    });
+    return TaskDetailsResponse.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  @override
+  Future<TasksResponse> getTodos(int page) async {
+    Response response = await _dio.request("todos",
+        method: RequestMethod.GET, queryParameters: {"page": page});
+
+    return TasksResponse.fromList(response.data);
+  }
+
+  @override
+  Future<void> deleteTask(String id) async {
+    await _dio.request("todos/$id", method: RequestMethod.DELETE, headers: {
+      "Authorization": "Bearer ${instance<AppPreferences>().accessToken}",
+    });
+  }
+
+  @override
+  Future<String> refreshToken() async {
+    Response response = await _dio.request("auth/refresh-token",
+        method: RequestMethod.GET,
+        queryParameters: {"token": instance<AppPreferences>().refreshToken});
+    return response.data["access_token"];
+  }
+
+  @override
+  Future<TaskDetailsResponse> updateTask(UpdateTaskRequest request) async {
+    var body = {};
+
+    if (request.image != null) {
+      var result = await uploadImage(request.image!);
+      body.addAll({"image": result.image});
+    }
+    if (request.title != null)
+      body.addAll({
+        "title": request.title,
+      });
+    if (request.description != null)
+      body.addAll({
+        "desc": request.description,
+      });
+    if (request.priority != null)
+      body.addAll({
+        "priority": request.priority,
+      });
+    if (request.dueDate != null)
+      body.addAll({
+        "dueDate": request.dueDate,
+      });
+
+    Response response =
+        await _dio.request("todos/${request.id}", method: RequestMethod.PUT, body: body);
+    return TaskDetailsResponse.fromJson(response.data as Map<String, dynamic>);
   }
 }

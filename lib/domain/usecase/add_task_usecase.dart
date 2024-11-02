@@ -8,10 +8,10 @@ import 'package:todo_task/domain/usecase/base.dart';
 import '../../data/request/request.dart';
 import '../model/models.dart';
 
-class AddTaskUsecase implements Base<AddTaskRequest, TaskId>{
+class AddTaskUsecase implements Base<AddTaskRequest, TaskDetails>{
   final Repository _repository;
   AddTaskUsecase(this._repository);
 
   @override
-  Future<Either<Failure, TaskId>> execute(AddTaskRequest input) => _repository.addTask(input);
+  Future<Either<Failure, TaskDetails>> execute(AddTaskRequest input) => _repository.addTask(input);
 }

@@ -1,23 +1,23 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:responsive_ui/responsive_ui.dart';
 import 'package:toastification/toastification.dart';
-import 'package:todo_task/app/app.dart';
 import 'package:todo_task/app/enums.dart';
 import 'package:todo_task/app/extensions.dart';
-import 'package:todo_task/data/request/request.dart';
+import 'package:todo_task/domain/model/models.dart';
+import 'package:todo_task/presentation/common/after_layout.dart';
 import 'package:todo_task/presentation/common/toast.dart';
 import 'package:todo_task/presentation/res/translations_manager.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:todo_task/presentation/views/add_new_task/bloc/add_new_task_bloc.dart';
 import 'package:todo_task/presentation/views/add_new_task/view/widgets/custom_form.dart';
-import '../../../../app/dependency_injection.dart';
-import '../../../../data/network/api.dart';
+import '../../../../app/constants.dart';
 import '../../../common/overlay_loading.dart';
 import '../../../common/state_render.dart';
 import '../../../common/tasks_functions.dart';
@@ -25,16 +25,19 @@ import '../../../res/assets_manager.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart' as intl;
 
-import '../../../res/routes_manager.dart';
+import '../../home/bloc/home_bloc.dart';
 
 class AddNewTaskView extends StatefulWidget {
-  const AddNewTaskView({super.key});
+  final bool newTask;
+  final TaskDetails? taskDetails;
+
+  const AddNewTaskView({super.key, this.newTask = true, this.taskDetails});
 
   @override
   State<AddNewTaskView> createState() => _AddNewTaskViewState();
 }
 
-class _AddNewTaskViewState extends State<AddNewTaskView> {
+class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
   PlatformFile? selectedFile;
   late TextEditingController titleController;
   late TextEditingController descriptionController;
@@ -61,6 +64,13 @@ class _AddNewTaskViewState extends State<AddNewTaskView> {
     descriptionController = TextEditingController();
     titleFocus = FocusNode();
     descriptionFocus = FocusNode();
+
+    if (!widget.newTask) {
+      titleController.text = widget.taskDetails!.title;
+      descriptionController.text = widget.taskDetails!.description;
+      selectedDateTime = widget.taskDetails!.createdAt;
+      selectedPriority = widget.taskDetails!.priority;
+    }
     super.initState();
   }
 
@@ -74,31 +84,54 @@ class _AddNewTaskViewState extends State<AddNewTaskView> {
   }
 
   void onClick() async {
-    if (titleController.text.trim().isEmpty) {
-      titleFocus.requestFocus();
-    } else if (descriptionController.text.trim().isEmpty) {
-      descriptionFocus.requestFocus();
-    } else if (selectedFile == null) {
-      showToast(
-          msg: Translation.choose_image.tr,
-          type: ToastificationType.warning,
-          context: context);
-    } else if (selectedDateTime == null) {
-      showToast(
-          msg: Translation.choose_due_date.tr,
-          type: ToastificationType.warning,
-          context: context);
+    if (widget.newTask) {
+      if (titleController.text.trim().isEmpty) {
+        titleFocus.requestFocus();
+      } else if (descriptionController.text.trim().isEmpty) {
+        descriptionFocus.requestFocus();
+      } else if (selectedFile == null) {
+        showToast(
+            msg: Translation.choose_image.tr,
+            type: ToastificationType.warning,
+            context: context);
+      } else if (selectedDateTime == null) {
+        showToast(
+            msg: Translation.choose_due_date.tr,
+            type: ToastificationType.warning,
+            context: context);
+      } else {
+        context.read<AddNewTaskBloc>().add(AddTaskEvent(
+            image: File(selectedFile!.path!),
+            title: titleController.text,
+            priority: selectedPriority.name,
+            description: descriptionController.text,
+            dueDate: intl.DateFormat("yyyy-MM-dd", context.locale.languageCode)
+                .format(selectedDateTime!)));
+      }
     } else {
+      bool isImageChanged = selectedFile != null;
+      bool isTitleChanged = titleController.text.trim().isNotEmpty &&
+          titleController.text != widget.taskDetails!.title;
+      bool isPriorityChanged = selectedPriority != widget.taskDetails!.priority;
+      bool isDescriptionChanged =
+          descriptionController.text.trim().isNotEmpty &&
+              descriptionController.text != widget.taskDetails!.description;
+      bool isDueDateChanged =
+          selectedDateTime!.compareTo(widget.taskDetails!.createdAt) != 0;
 
-      context.read<AddNewTaskBloc>().add(AddTaskEvent(
-          image: File(selectedFile!.path!),
-          title: titleController.text,
-          priority: selectedPriority.name,
-          description: descriptionController.text,
-          dueDate: intl.DateFormat("yyyy-MM-dd", context.locale.languageCode)
-              .format(selectedDateTime!))
-      );
+      if(!isDueDateChanged && !isTitleChanged && !isPriorityChanged && !isDescriptionChanged && !isDueDateChanged) return;
 
+      context.read<AddNewTaskBloc>().add(UpdateTaskEvent(
+        id: widget.taskDetails!.id,
+          image: isImageChanged ? File(selectedFile!.path!) : null,
+          title: isTitleChanged ? titleController.text : null,
+          priority: isPriorityChanged ? selectedPriority.name : null,
+          description: isDescriptionChanged ? descriptionController.text : null,
+          dueDate: isDueDateChanged
+              ? intl.DateFormat("yyyy-MM-dd", context.locale.languageCode)
+                  .format(selectedDateTime!)
+              : null
+      ));
     }
   }
 
@@ -120,6 +153,12 @@ class _AddNewTaskViewState extends State<AddNewTaskView> {
                 timeInSec: 5);
           } else if (state.reqState == ReqState.success) {
             overlayLoading.hideLoading();
+            // add task in home
+            if(widget.newTask){
+              context.read<HomeBloc>().add(HomeAddTaskEvent(state.taskDetails!));
+            }else{
+              context.read<HomeBloc>().add(HomeUpdateTaskEvent(state.taskDetails!));
+            }
             Navigator.pop(context);
           } else if (state.reqState == ReqState.loading) {
             overlayLoading.showLoading();
@@ -154,7 +193,9 @@ class _AddNewTaskViewState extends State<AddNewTaskView> {
                               )),
                           15.horizontalSpace,
                           Text(
-                            Translation.add_new_task.tr,
+                            widget.newTask
+                                ? Translation.add_new_task.tr
+                                : Translation.update.tr,
                             style: context.small.copyWith(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 20.sp,
@@ -178,7 +219,13 @@ class _AddNewTaskViewState extends State<AddNewTaskView> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                if (selectedFile == null) ...[
+                                if (!widget.newTask && selectedFile == null)
+                                  CachedNetworkImage(
+                                    imageUrl:
+                                        "${Constants.baseUrl}images/${widget.taskDetails!.image}",
+                                    fit: BoxFit.cover,
+                                  )
+                                else if (selectedFile == null) ...[
                                   Icon(
                                     Icons.image_outlined,
                                     size: 45.sp,
@@ -193,7 +240,10 @@ class _AddNewTaskViewState extends State<AddNewTaskView> {
                                         color: context.colorScheme.primary),
                                   )
                                 ] else
-                                  Image.file(File(selectedFile!.path!))
+                                  Image.file(
+                                    File(selectedFile!.path!),
+                                    fit: BoxFit.cover,
+                                  )
                               ],
                             ),
                           ),
@@ -205,7 +255,8 @@ class _AddNewTaskViewState extends State<AddNewTaskView> {
                         style: context.small.copyWith(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w400,
-                            color: context.colorScheme.onPrimary.withOpacity(.4)),
+                            color:
+                                context.colorScheme.onPrimary.withOpacity(.4)),
                       ),
                       5.verticalSpace,
                       CustomForm(
@@ -224,7 +275,8 @@ class _AddNewTaskViewState extends State<AddNewTaskView> {
                         style: context.small.copyWith(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w400,
-                            color: context.colorScheme.onPrimary.withOpacity(.4)),
+                            color:
+                                context.colorScheme.onPrimary.withOpacity(.4)),
                       ),
                       5.verticalSpace,
                       CustomForm(
@@ -245,7 +297,8 @@ class _AddNewTaskViewState extends State<AddNewTaskView> {
                         style: context.small.copyWith(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w400,
-                            color: context.colorScheme.onPrimary.withOpacity(.4)),
+                            color:
+                                context.colorScheme.onPrimary.withOpacity(.4)),
                       ),
                       5.verticalSpace,
                       Container(
@@ -319,7 +372,8 @@ class _AddNewTaskViewState extends State<AddNewTaskView> {
                         style: context.small.copyWith(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w400,
-                            color: context.colorScheme.onPrimary.withOpacity(.4)),
+                            color:
+                                context.colorScheme.onPrimary.withOpacity(.4)),
                       ),
                       5.verticalSpace,
                       InkWell(
@@ -381,10 +435,14 @@ class _AddNewTaskViewState extends State<AddNewTaskView> {
                                 Size(double.infinity, 50.w)),
                             backgroundColor: WidgetStatePropertyAll(
                                 context.colorScheme.primary),
-                            shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.r)))),
+                            shape: WidgetStatePropertyAll(
+                                RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(10.r)))),
                         child: Text(
-                          Translation.add_task.tr,
+                          widget.newTask
+                              ? Translation.add_task.tr
+                              : Translation.update.tr,
                           style: context.small.copyWith(
                               fontSize: 20.sp,
                               fontWeight: FontWeight.w700,
@@ -402,4 +460,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> {
       ),
     );
   }
+
+  @override
+  Future<void> afterLayout(BuildContext context) async {}
 }

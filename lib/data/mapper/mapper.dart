@@ -1,3 +1,4 @@
+import 'package:todo_task/app/enums.dart';
 import 'package:todo_task/app/extensions.dart';
 import 'package:todo_task/data/request/request.dart';
 import 'package:todo_task/data/responses/responses.dart';
@@ -11,6 +12,21 @@ extension RegisterDetailsMapper on RegisterDetailsResponse {
       refreshToken: refreshToken.orEmpty);
 }
 
-extension TaskIdMapper on TaskIdResponse{
-  TaskId get toDomain => TaskId(id: id);
+extension TaskDetailsMapper on TaskDetailsResponse {
+  TaskDetails get toDomain => TaskDetails(
+      id: id.orEmpty,
+      title: title.orEmpty,
+      description: description.orEmpty,
+      user: user.orEmpty,
+      status: TaskState.from(status.orEmpty)!,
+      priority: TaskPriority.from(priority.orEmpty)!,
+      image: image.orEmpty,
+      createdAt: DateTime.parse(createdAt.orEmpty),
+      updatedAt: DateTime.parse(updatedAt.orEmpty));
+}
+
+extension TasksMapper on TasksResponse{
+  Tasks get toDomain => Tasks(
+      tasksGroup: tasksGroup.map((e) => e.toDomain).toList()
+  );
 }

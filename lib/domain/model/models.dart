@@ -1,5 +1,7 @@
 
 
+import 'package:todo_task/app/enums.dart';
+
 class Source {
   String id;
   String name;
@@ -40,7 +42,33 @@ class RegisterDetails {
         required this.refreshToken});
 }
 
-class TaskId{
-  final String? id;
-  TaskId({required this.id});
+class TaskDetails{
+  final String id;
+  final String image;
+  final String title;
+  final String description;
+  final TaskPriority priority;
+  final TaskState status;
+  final String user;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  TaskDetails(
+      {required this.image,
+        required this.priority,
+        required this.description,
+        required this.title,
+        required this.user,
+        required this.status,
+        required this.createdAt,
+        required this.updatedAt,
+        required this.id});
+}
+
+
+class Tasks{
+  List<TaskDetails> tasksGroup;
+  Tasks({
+    required this.tasksGroup
+  });
 }

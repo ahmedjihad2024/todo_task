@@ -40,7 +40,12 @@ enum Translation{
   due_date,
   choose_due_date,
   add_task,
-  choose_image
+  choose_image,
+  try_again,
+  delete,
+  edit,
+  update_task,
+  update,
 }
 
 extension Tra on Translation{

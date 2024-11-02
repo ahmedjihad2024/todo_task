@@ -101,7 +101,8 @@ enum DioErrorType {
 
 enum ApiErrorType {
   UNAUTHORIZED_INVALID_PASSWORD_OR_EMAIL(401, "يوجد خطأ في رقم الهاتف أو كلمة المرور"),
-  BAD_REQUEST_USER_EXISTS(422, "رقم الهاتف مستخدم بالفعل");
+  BAD_REQUEST_USER_EXISTS(422, "رقم الهاتف مستخدم بالفعل"),
+  ACCESS_TOKEN_FORBIDDEN(403, "Forbidden");
 
   final dynamic statusCode;
   final String message;

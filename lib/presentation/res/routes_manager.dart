@@ -27,21 +27,27 @@ enum RoutesManager {
 }
 
 class RoutesGeneratorManager {
-  static final Map<String, WidgetBuilder> _routeBuilders = {
-    RoutesManager.splash.route: (_) => const SplashView(),
-    RoutesManager.onBoarding.route: (_) => OnBoardingView(),
-    RoutesManager.login.route: (_) =>
-        BlocProvider(create: (_) => instance<LoginBloc>(), child: LoginView()),
-    RoutesManager.signUp.route: (_) => BlocProvider(
-        create: (_) => instance<SignUpBloc>(), child: SignUpView()),
-    RoutesManager.home.route: (_) => BlocProvider(
-          create: (_) => instance<HomeBloc>(),
-          child: HomeView(),
-        ),
-    RoutesManager.addNewTask.route: (_) => BlocProvider(
-        create: (_) => instance<AddNewTaskBloc>(), child: AddNewTaskView()),
-  };
+
+  static WidgetBuilder _getBuilder(String? name, RouteSettings settings) {
+    return switch (RoutesManager.values.firstWhere((t) => t.route == name)) {
+      RoutesManager.splash => (_) => const SplashView(),
+      RoutesManager.onBoarding => (_) => OnBoardingView(),
+      RoutesManager.login => (_) => BlocProvider(
+          create: (_) => instance<LoginBloc>(), child: LoginView()),
+      RoutesManager.signUp => (_) => BlocProvider(
+          create: (_) => instance<SignUpBloc>(), child: SignUpView()),
+      RoutesManager.home => (_) => HomeView(),
+      RoutesManager.addNewTask => (context) => BlocProvider(
+          create: (_) => instance<AddNewTaskBloc>(), child: AddNewTaskView(
+        newTask: settings.arguments != null ? (settings.arguments as Map)["new-task"] ?? true : true,
+        taskDetails: settings.arguments != null ?  (settings.arguments as Map)["details"] : null,
+      )),
+    };
+  }
 
   static Route<dynamic> getRoute(RouteSettings settings) => MaterialPageRoute(
-      builder: _routeBuilders[settings.name]!, settings: settings);
+      builder: _getBuilder(settings.name, settings), settings: settings);
+
+// static Route<dynamic> getRoute(RouteSettings settings) => MaterialPageRoute(
+//     builder: _routeBuilders[settings.name]!, settings: settings);
 }

@@ -20,12 +20,16 @@ class OverlayLoading {
   }
 
   Future<void> hideLoading() async {
-    Timer.periodic(const Duration(milliseconds: 100), (t) async{
-      try{
-        await _hideFunction();
-        t.cancel();
-      }catch(e){}
-    });
+    try{
+      await _hideFunction();
+    }catch(e){
+      Timer.periodic(const Duration(milliseconds: 100), (t) async{
+        try{
+          await _hideFunction();
+          t.cancel();
+        }catch(e){}
+      });
+    }
   }
 
   void setHideFunction(Future<void> Function() fun) => _hideFunction = fun;

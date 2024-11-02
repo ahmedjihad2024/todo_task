@@ -2,6 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:todo_task/app/constants.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:todo_task/data/network/api.dart';
+
+import '../../app/app_preferences.dart';
+import '../../app/dependency_injection.dart';
 
 const String APPLICATION_JSON = 'application/json';
 const String CONTENT_TYPE = 'content-type';
@@ -9,9 +13,7 @@ const String ACCEPT = 'accept';
 const String AUTHORIZATION = 'authorization';
 const String DEFAULT_LANGUAGE = 'language';
 
-enum RequestMethod{
-  GET, POST, PUT, DELETE
-}
+enum RequestMethod { GET, POST, PUT, DELETE }
 
 class DioFactory {
   late Dio _dio;
@@ -34,9 +36,29 @@ class DioFactory {
         headers: headers,
         followRedirects: false,
         receiveDataWhenStatusError: true
-      // receiveTimeout: Duration(seconds: _timeOut),
-      // sendTimeout: Duration(seconds: _timeOut)
-    );
+        // receiveTimeout: Duration(seconds: _timeOut),
+        // sendTimeout: Duration(seconds: _timeOut)
+        );
+
+    _dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
+      // Add the access token to the request header
+      options.headers['Authorization'] =
+          'Bearer ${instance<AppPreferences>().accessToken}';
+      return handler.next(options);
+    }, onError: (DioException e, handler) async {
+      if (e.response?.statusCode == 401 &&
+          e.response?.data?["message"] == "Unauthorized") {
+          try{
+            String newAccessToken = await instance<AppServices>().refreshToken();
+            await instance<AppPreferences>().setAccessToken(newAccessToken);
+            e.requestOptions.headers['Authorization'] = "Bearer $newAccessToken";
+            return handler.resolve(await _dio.fetch(e.requestOptions));
+          }catch(error){
+            rethrow;
+          }
+      }
+      return handler.next(e);
+    }));
 
     if (kDebugMode) {
       _dio.interceptors.add(PrettyDioLogger(
@@ -49,18 +71,13 @@ class DioFactory {
 
   Future<Response> request(String path,
       {RequestMethod method = RequestMethod.GET,
-        Map<String, dynamic>? queryParameters,
-        Object? body,
-        Map<String, dynamic>? headers}) async {
-    return await _dio.request(
-        path,
+      Map<String, dynamic>? queryParameters,
+      Object? body,
+      Map<String, dynamic>? headers}) async {
+    return await _dio.request(path,
         data: body,
         queryParameters: queryParameters,
-        options: Options(
-            method: method.name,
-            headers: headers
-        )
-    );
+        options: Options(method: method.name, headers: headers));
   }
 
 // Dio getDio() {

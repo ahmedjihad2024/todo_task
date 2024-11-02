@@ -18,3 +18,21 @@ class AddTaskEvent extends AddNewTaskEvent {
         required this.dueDate});
 }
 
+class UpdateTaskEvent extends AddNewTaskEvent {
+  final String id;
+  final File? image;
+  final String? title;
+  final String? description;
+  final String? priority;
+  final String? dueDate;
+
+  UpdateTaskEvent(
+      {required this.id,
+        this.image,
+        this.title,
+        this.priority,
+        this.description,
+        this.dueDate});
+}
+
+

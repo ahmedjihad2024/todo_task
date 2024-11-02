@@ -19,19 +19,6 @@ class Repository implements RepositoryAbs{
   final NetworkConnectivity _networkConnectivity;
   Repository(this._dataSource, this._networkConnectivity);
 
-  @override
-  Future<Either<Failure, Articles>> getArticles(ArticleRequest articleRequest) async{
-    if(await _networkConnectivity.isConnected){
-      try{
-        var response = await _dataSource.getArticles(articleRequest);
-        return const Left(NoInternetConnection());
-      }on Exception catch(e){
-        return Left(e.handle);
-      }
-    }else{
-      return const Left(NoInternetConnection());
-    }
-  }
 
   @override
   Future<Either<Failure, RegisterDetails>> login(LoginRequest request) async {
@@ -62,10 +49,52 @@ class Repository implements RepositoryAbs{
   }
 
   @override
-  Future<Either<Failure, TaskId>> addTask(AddTaskRequest request) async {
+  Future<Either<Failure, TaskDetails>> addTask(AddTaskRequest request) async {
     if(await _networkConnectivity.isConnected){
       try{
         var response = await _dataSource.addTask(request);
+        return Right(response.toDomain);
+      }on Exception catch(e){
+        return Left(e.handle);
+      }
+    }else{
+      return const Left(NoInternetConnection());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Tasks>> getTodos(int page) async {
+    if(await _networkConnectivity.isConnected){
+      try{
+        var response = await _dataSource.getTodos(page);
+        return Right(response.toDomain);
+      }on Exception catch(e){
+        return Left(e.handle);
+      }
+    }else{
+      return const Left(NoInternetConnection());
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteTask(String id) async {
+    if(await _networkConnectivity.isConnected){
+      try{
+        var response = await _dataSource.deleteTask(id);
+        return const Right(null);
+      }on Exception catch(e){
+        return Left(e.handle);
+      }
+    }else{
+      return const Left(NoInternetConnection());
+    }
+  }
+
+  @override
+  Future<Either<Failure, TaskDetails>> updateTask(UpdateTaskRequest request) async {
+    if(await _networkConnectivity.isConnected){
+      try{
+        var response = await _dataSource.updateTask(request);
         return Right(response.toDomain);
       }on Exception catch(e){
         return Left(e.handle);

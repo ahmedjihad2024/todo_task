@@ -1,6 +1,22 @@
 part of 'home_bloc.dart';
 
 @immutable
-sealed class HomeState {}
+class HomeState{
+  final ReqState reqState;
+  final String? errorMessage;
+  final List<TaskDetails> tasksGroup;
 
-final class HomeInitial extends HomeState {}
+  HomeState({this.reqState = ReqState.loading, this.errorMessage, this.tasksGroup = const []});
+
+  HomeState copy({
+    ReqState? reqState,
+    String? errorMessage,
+    List<TaskDetails>? tasksGroup
+  }) {
+    return HomeState(
+        reqState: reqState ?? this.reqState,
+        errorMessage: errorMessage ?? this.errorMessage,
+      tasksGroup: tasksGroup ?? this.tasksGroup
+    );
+  }
+}

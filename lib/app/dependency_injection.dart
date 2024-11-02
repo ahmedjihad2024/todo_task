@@ -10,7 +10,6 @@ import 'package:todo_task/presentation/views/home/bloc/home_bloc.dart';
 import 'package:todo_task/presentation/views/login/bloc/login_bloc.dart';
 import 'package:todo_task/presentation/views/sign_up/bloc/sign_up_bloc.dart';
 
-import '../domain/usecase/articles.dart';
 import '../presentation/views/add_new_task/bloc/add_new_task_bloc.dart';
 
 final instance = GetIt.instance;
@@ -35,6 +34,4 @@ Future initAppModules() async {
   instance.registerFactory<SignUpBloc>(()=> SignUpBloc(instance<Repository>()));
   instance.registerFactory<AddNewTaskBloc>(()=> AddNewTaskBloc(instance<Repository>()));
   // **
-
-  instance.registerFactory<GetArticles>(() => GetArticles(instance<Repository>()));
 }

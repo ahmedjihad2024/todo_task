@@ -4,10 +4,12 @@ import '../request/request.dart';
 import '../responses/responses.dart';
 
 abstract class DataSourceAbs{
-  Future<ArticlesResponse> getArticles(ArticleRequest articleRequest);
   Future<RegisterDetailsResponse> login(String phone,String password);
   Future<RegisterDetailsResponse> signIn(RegisterRequest request);
-  Future<TaskIdResponse> addTask(AddTaskRequest request);
+  Future<TaskDetailsResponse> addTask(AddTaskRequest request);
+  Future<TasksResponse> getTodos(int page);
+  Future<void> deleteTask(String id);
+  Future<TaskDetailsResponse> updateTask(UpdateTaskRequest request);
 }
 
 class DataSource implements DataSourceAbs{
@@ -16,15 +18,20 @@ class DataSource implements DataSourceAbs{
   DataSource(this.appServices);
 
   @override
-  Future<ArticlesResponse> getArticles(ArticleRequest articleRequest) async => await appServices.getArticles(articleRequest);
-
-  @override
   Future<RegisterDetailsResponse> login(String phone, String password) async => await appServices.login(phone, password);
 
   @override
   Future<RegisterDetailsResponse> signIn(RegisterRequest request) async => await appServices.signIn(request);
 
   @override
-  Future<TaskIdResponse> addTask(AddTaskRequest request) async => await appServices.addTask(request);
+  Future<TaskDetailsResponse> addTask(AddTaskRequest request) async => await appServices.addTask(request);
 
+  @override
+  Future<TasksResponse> getTodos(int page) async => await appServices.getTodos(page);
+
+  @override
+  Future<void> deleteTask(String id) async => await appServices.deleteTask(id);
+
+  @override
+  Future<TaskDetailsResponse> updateTask(UpdateTaskRequest request) async => await appServices.updateTask(request);
 }

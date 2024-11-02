@@ -29,3 +29,11 @@ String getPriorityText(TaskPriority priority) {
     TaskPriority.high => Translation.high.tr,
   };
 }
+
+Color getTaskPriorityColor(TaskPriority priority) {
+  return switch (priority) {
+    TaskPriority.low => ColorManager.strongBlue,
+    TaskPriority.medium => ColorManager.royalPurple,
+    TaskPriority.high => ColorManager.orange,
+  };
+}

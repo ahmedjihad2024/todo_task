@@ -36,5 +36,11 @@
   "due_date": "Due data",
   "choose_due_date": "Choose due data",
   "add_task": "Add task",
-  "choose_image": "Choose image"
+  "choose_image": "Choose image",
+  "try_again": "Try again",
+  "delete" : "Delete",
+  "edit" : "Edit",
+  "update_task" : "Update task",
+  "update": "Update"
+
 }
