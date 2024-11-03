@@ -6,6 +6,7 @@ import 'package:nice_text_form/nice_text_form.dart';
 import 'package:toastification/toastification.dart';
 import 'package:todo_task/app/enums.dart';
 import 'package:todo_task/app/extensions.dart';
+import 'package:todo_task/presentation/common/after_layout.dart';
 import 'package:todo_task/presentation/common/custom_form_field.dart';
 import 'package:todo_task/presentation/common/simple_form.dart';
 import 'package:todo_task/presentation/common/phone_form.dart';
@@ -30,7 +31,7 @@ class SignUpView extends StatefulWidget {
   State<SignUpView> createState() => _SignUpViewState();
 }
 
-class _SignUpViewState extends State<SignUpView> {
+class _SignUpViewState extends State<SignUpView> with AfterLayout{
   late TextEditingController numberController;
   late TextEditingController passwordController;
   late TextEditingController nameController;
@@ -115,7 +116,6 @@ class _SignUpViewState extends State<SignUpView> {
 
   @override
   Widget build(BuildContext context) {
-    overlayLoading = OverlayLoading(context);
 
     return Scaffold(
       backgroundColor: context.theme.scaffoldBackgroundColor,
@@ -202,5 +202,10 @@ class _SignUpViewState extends State<SignUpView> {
         },
       ),
     );
+  }
+
+  @override
+  Future<void> afterLayout(BuildContext context) async {
+    overlayLoading = OverlayLoading(context);
   }
 }

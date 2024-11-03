@@ -8,14 +8,13 @@ class OverlayLoading {
   OverlayEntry? overlayEntry;
   late Future<void> Function() _hideFunction;
 
-  OverlayLoading(this._context,){
+  OverlayLoading(this._context,);
+
+  void showLoading() {
     overlayEntry = OverlayEntry(
         builder: (con) => Theme(
             data: Theme.of(_context),
             child: RegisterLoading(overlayLoading: this)));
-  }
-
-  void showLoading() {
     Overlay.of(_context).insert(overlayEntry!);
   }
 
@@ -27,7 +26,9 @@ class OverlayLoading {
         try{
           await _hideFunction();
           t.cancel();
-        }catch(e){}
+        }catch(e){
+          print(e);
+        }
       });
     }
   }

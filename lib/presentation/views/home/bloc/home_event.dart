@@ -30,3 +30,8 @@ class ApplyFilterEvent extends HomeEvent{
   final TaskState state;
   ApplyFilterEvent(this.state);
 }
+
+class LogoutEvent extends HomeEvent{
+  final Function() onLogout;
+  LogoutEvent(this.onLogout);
+}

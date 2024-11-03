@@ -41,6 +41,7 @@
   "delete" : "Delete",
   "edit" : "Edit",
   "update_task" : "Update task",
-  "update": "Update"
+  "update": "Update",
+  "task_details": "Task details"
 
 }

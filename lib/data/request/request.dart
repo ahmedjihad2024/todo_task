@@ -56,6 +56,7 @@ class UpdateTaskRequest {
   final File? image;
   final String? title;
   final String? description;
+  final String? status;
   final String? priority;
   final String? dueDate;
 
@@ -63,6 +64,7 @@ class UpdateTaskRequest {
       {required this.id,
         this.image,
         this.title,
+        this.status,
         this.priority,
         this.description,
         this.dueDate});

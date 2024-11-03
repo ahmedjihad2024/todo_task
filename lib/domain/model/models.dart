@@ -1,5 +1,6 @@
 
 
+import 'package:equatable/equatable.dart';
 import 'package:todo_task/app/enums.dart';
 
 class Source {

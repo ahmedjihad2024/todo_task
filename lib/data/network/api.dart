@@ -130,9 +130,14 @@ class AppServices implements AppServicesClientAbs {
       body.addAll({
         "dueDate": request.dueDate,
       });
+    if (request.status != null)
+      body.addAll({
+        "status": request.status,
+      });
 
-    Response response =
-        await _dio.request("todos/${request.id}", method: RequestMethod.PUT, body: body);
+    Response response = await _dio.request("todos/${request.id}",
+        method: RequestMethod.PUT, body: body);
+
     return TaskDetailsResponse.fromJson(response.data as Map<String, dynamic>);
   }
 }

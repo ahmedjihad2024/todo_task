@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_task/app/dependency_injection.dart';
+import 'package:todo_task/domain/model/models.dart';
 import 'package:todo_task/presentation/views/add_new_task/bloc/add_new_task_bloc.dart';
 import 'package:todo_task/presentation/views/add_new_task/view/add_new_task_view.dart';
 import 'package:todo_task/presentation/views/home/bloc/home_bloc.dart';
@@ -10,6 +11,8 @@ import 'package:todo_task/presentation/views/login/view/login_view.dart';
 import 'package:todo_task/presentation/views/on_boarding/view/on_boarding_view.dart';
 import 'package:todo_task/presentation/views/sign_up/bloc/sign_up_bloc.dart';
 import 'package:todo_task/presentation/views/sign_up/view/sign_up_view.dart';
+import 'package:todo_task/presentation/views/task_details/bloc/task_details_bloc.dart';
+import 'package:todo_task/presentation/views/task_details/view/task_details_view.dart';
 
 import '../views/splash/view/splash_view.dart';
 
@@ -19,6 +22,7 @@ enum RoutesManager {
   onBoarding("on-boarding-view/"),
   login("login/"),
   signUp("sign-up/"),
+  taskDetails("task-details/"),
   addNewTask("add-new-task/");
 
   final String route;
@@ -27,7 +31,6 @@ enum RoutesManager {
 }
 
 class RoutesGeneratorManager {
-
   static WidgetBuilder _getBuilder(String? name, RouteSettings settings) {
     return switch (RoutesManager.values.firstWhere((t) => t.route == name)) {
       RoutesManager.splash => (_) => const SplashView(),
@@ -37,11 +40,21 @@ class RoutesGeneratorManager {
       RoutesManager.signUp => (_) => BlocProvider(
           create: (_) => instance<SignUpBloc>(), child: SignUpView()),
       RoutesManager.home => (_) => HomeView(),
-      RoutesManager.addNewTask => (context) => BlocProvider(
-          create: (_) => instance<AddNewTaskBloc>(), child: AddNewTaskView(
-        newTask: settings.arguments != null ? (settings.arguments as Map)["new-task"] ?? true : true,
-        taskDetails: settings.arguments != null ?  (settings.arguments as Map)["details"] : null,
-      )),
+      RoutesManager.addNewTask => (_) => BlocProvider(
+          create: (_) => instance<AddNewTaskBloc>(),
+          child: AddNewTaskView(
+            newTask: settings.arguments != null
+                ? (settings.arguments as Map)["new-task"] ?? true
+                : true,
+            taskDetails: settings.arguments != null
+                ? (settings.arguments as Map)["details"]
+                : null,
+          )),
+      RoutesManager.taskDetails => (_) => BlocProvider(
+            create: (_) => instance<TaskDetailsBloc>(),
+            child: TaskDetailsView(
+                tasksDetails: settings.arguments as TaskDetails),
+          )
     };
   }
 

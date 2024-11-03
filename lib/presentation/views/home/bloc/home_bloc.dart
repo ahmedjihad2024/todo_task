@@ -4,6 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:todo_task/app/app_preferences.dart';
+import 'package:todo_task/app/dependency_injection.dart';
 import 'package:todo_task/app/enums.dart';
 import 'package:todo_task/app/user_messages.dart';
 import 'package:todo_task/data/repository/repository_impl.dart';
@@ -33,6 +35,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeUpdateTaskEvent>(_updateTask);
     on<HomeDeleteTaskEvent>(_deleteTask);
     on<ApplyFilterEvent>(_applyFilterEvent);
+    on<LogoutEvent>(_logout);
 
     _getTodosUsecase = GetTodosUsecase(_repository);
     _deleteTaskUsecase = DeleteTaskUsecase(_repository);
@@ -95,12 +98,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   FutureOr<void> _updateTask(
       HomeUpdateTaskEvent event, Emitter<HomeState> emit) async {
+    int index = state.tasksGroup.indexWhere((e) => e.id == event.taskDetails.id);
     var newGroup =
-    _groupOfTaskDetails.where((e) => e.id != event.taskDetails.id).toList();
+    _groupOfTaskDetails.where((e) => e.id != event.taskDetails.id).toList()..insert(index, event.taskDetails);
     emit(state.copy(
         reqState: ReqState.success,
-        tasksGroup: filterTasks([event.taskDetails, ...newGroup], _filter)));
-    _groupOfTaskDetails = [event.taskDetails, ...newGroup];
+        tasksGroup: filterTasks(newGroup, _filter)));
+    _groupOfTaskDetails = newGroup;
   }
 
   FutureOr<void> _deleteTask(
@@ -139,5 +143,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         tasksGroup: filterTasks(_groupOfTaskDetails, _filter)
       )
     );
+  }
+
+  FutureOr<void> _logout(
+      LogoutEvent event, Emitter<HomeState> emit) async {
+    await instance<AppPreferences>().clearAllTokens();
+    event.onLogout();
   }
 }

@@ -48,14 +48,19 @@ class DioFactory {
     }, onError: (DioException e, handler) async {
       if (e.response?.statusCode == 401 &&
           e.response?.data?["message"] == "Unauthorized") {
-          try{
-            String newAccessToken = await instance<AppServices>().refreshToken();
-            await instance<AppPreferences>().setAccessToken(newAccessToken);
-            e.requestOptions.headers['Authorization'] = "Bearer $newAccessToken";
-            return handler.resolve(await _dio.fetch(e.requestOptions));
-          }catch(error){
-            rethrow;
+        try {
+          String newAccessToken = await instance<AppServices>().refreshToken();
+          await instance<AppPreferences>().setAccessToken(newAccessToken);
+          e.requestOptions.headers['Authorization'] = "Bearer $newAccessToken";
+          if (e.requestOptions.headers['Content-Type']
+              ?.startsWith('multipart/form-data')) {
+            FormData newFormData = FormData.fromMap(e.requestOptions.data);
+            e.requestOptions.data = newFormData;
           }
+          return handler.resolve(await _dio.fetch(e.requestOptions));
+        } catch (error) {
+          rethrow;
+        }
       }
       return handler.next(e);
     }));
@@ -65,7 +70,7 @@ class DioFactory {
           requestHeader: true,
           requestBody: true,
           responseHeader: true,
-          responseBody: false));
+          responseBody: true));
     }
   }
 

@@ -137,14 +137,12 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
 
   @override
   Widget build(BuildContext context) {
-    overlayLoading = OverlayLoading(context);
 
     return Scaffold(
       body: BlocConsumer<AddNewTaskBloc, AddNewTaskState>(
         buildWhen: (_, __) => false,
         listener: (context, state) {
           if (state.errorMessage != null && state.reqState == ReqState.error) {
-            sleep(const Duration(seconds: 1));
             overlayLoading.hideLoading();
             showToast(
                 msg: state.errorMessage!,
@@ -462,5 +460,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
   }
 
   @override
-  Future<void> afterLayout(BuildContext context) async {}
+  Future<void> afterLayout(BuildContext context) async {
+    overlayLoading = OverlayLoading(context);
+  }
 }

@@ -11,6 +11,7 @@ import 'package:todo_task/presentation/views/login/bloc/login_bloc.dart';
 import 'package:todo_task/presentation/views/sign_up/bloc/sign_up_bloc.dart';
 
 import '../presentation/views/add_new_task/bloc/add_new_task_bloc.dart';
+import '../presentation/views/task_details/bloc/task_details_bloc.dart';
 
 final instance = GetIt.instance;
 
@@ -33,5 +34,6 @@ Future initAppModules() async {
   instance.registerFactory<LoginBloc>(()=> LoginBloc(instance<Repository>()));
   instance.registerFactory<SignUpBloc>(()=> SignUpBloc(instance<Repository>()));
   instance.registerFactory<AddNewTaskBloc>(()=> AddNewTaskBloc(instance<Repository>()));
+  instance.registerFactory<TaskDetailsBloc>(()=> TaskDetailsBloc(instance<Repository>()));
   // **
 }

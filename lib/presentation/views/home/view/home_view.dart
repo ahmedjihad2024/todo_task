@@ -7,6 +7,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:todo_task/app/enums.dart';
 import 'package:todo_task/app/extensions.dart';
 import 'package:todo_task/presentation/common/after_layout.dart';
+import 'package:todo_task/presentation/common/overlay_loading.dart';
 import 'package:todo_task/presentation/res/color_manager.dart';
 import 'package:todo_task/presentation/res/routes_manager.dart';
 import 'package:todo_task/presentation/res/translations_manager.dart';
@@ -29,6 +30,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> with AfterLayout {
   // TaskState selectedState = TaskState.all;
   late RefreshController refreshController;
+  late OverlayLoading overlayLoading;
 
   @override
   void initState() {
@@ -81,7 +83,14 @@ class _HomeViewState extends State<HomeView> with AfterLayout {
                                   color: context.colorScheme.onPrimary,
                                 )),
                             IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  overlayLoading.showLoading();
+                                  context.read<HomeBloc>().add(LogoutEvent((){
+                                    Navigator.of(context).pushNamedAndRemoveUntil(
+                                        RoutesManager.login.route, (_) => false);
+                                    overlayLoading.hideLoading();
+                                  }));
+                                },
                                 icon: Icon(
                                   Icons.logout,
                                   size: 30.sp,
@@ -282,5 +291,7 @@ class _HomeViewState extends State<HomeView> with AfterLayout {
   @override
   Future<void> afterLayout(BuildContext context) async {
     context.read<HomeBloc>().add(RefreshTasksEvent());
+    overlayLoading = OverlayLoading(context);
   }
+
 }

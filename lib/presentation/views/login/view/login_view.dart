@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:nice_text_form/nice_text_form.dart';
 import 'package:toastification/toastification.dart';
 import 'package:todo_task/app/extensions.dart';
+import 'package:todo_task/presentation/common/after_layout.dart';
 import 'package:todo_task/presentation/common/custom_form_field.dart';
 import 'package:todo_task/presentation/common/simple_form.dart';
 import 'package:todo_task/presentation/common/phone_form.dart';
@@ -30,7 +31,7 @@ class LoginView extends StatefulWidget {
   State<LoginView> createState() => _LoginViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _LoginViewState extends State<LoginView> with AfterLayout {
   late TextEditingController numberController;
   late TextEditingController passwordController;
   late SecurityController securityController;
@@ -81,7 +82,6 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
 
-    overlayLoading = OverlayLoading(context);
 
     return Scaffold(
       backgroundColor: context.theme.scaffoldBackgroundColor,
@@ -130,5 +130,9 @@ class _LoginViewState extends State<LoginView> {
         },
       ),
     );
+  }
+  @override
+  Future<void> afterLayout(BuildContext context) async {
+    overlayLoading = OverlayLoading(context);
   }
 }

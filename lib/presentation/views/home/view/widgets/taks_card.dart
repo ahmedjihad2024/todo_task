@@ -20,7 +20,9 @@ class TaskCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamed(RoutesManager.taskDetails.route, arguments: details);
+      },
       child: Container(
         padding: EdgeInsets.only(left: 20.w, right: 10.w, top: 10.w, bottom: 10.w),
         height: 110.w,
