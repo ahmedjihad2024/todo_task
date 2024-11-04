@@ -20,7 +20,7 @@ void showToast({
         width: 1
     ),
     backgroundColor: ColorManager.white,
-    description: Text(msg, style: context.small.copyWith(color: ColorManager.black, fontSize: desktopSize(14.sp, 14)), softWrap: true,),
+    description: Text(msg, style: context.small.copyWith(color: ColorManager.black, fontSize: desktopSize(size(mobile: 14.sp, tablet: 12.sp), 14)), softWrap: true,),
     showProgressBar: false,
     showIcon: false,
     alignment: Alignment.bottomCenter,

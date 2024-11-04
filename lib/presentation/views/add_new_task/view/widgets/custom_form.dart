@@ -88,13 +88,13 @@ class CustomForm extends StatelessWidget {
         fontWeight: FontWeight.w500
       ),
       textStyle: context.small.copyWith(
-        fontSize: desktopSize(16.sp, 14),
+        fontSize: desktopSize(size(mobile: 16.sp, tablet: 14.sp), 14),
         color: ColorManager.black,
         fontWeight: FontWeight.w500
       ),
       hintStyle: hintStyle ??
           context.small.copyWith(
-            fontSize: desktopSize(16.sp, 14),
+            fontSize: desktopSize(size(mobile: 16.sp, tablet: 14.sp), 14),
             color: ColorManager.black.withOpacity(.4),
           ),
       textEditingController: controller,

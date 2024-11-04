@@ -214,8 +214,8 @@ class _NiceTextFormState extends State<NiceTextForm> with AfterLayout {
                         initialSelection: widget.initialSelectionFlag ?? "EG",
                         localization: context.deviceLocale,
                         padding: EdgeInsets.zero,
-                        width: desktopSize(25.diagonal, 30),
-                        height: desktopSize(20.diagonal, 25),
+                        width: desktopSize(size(mobile: 25.diagonal, tablet: 12.diagonal), 30),
+                        height: desktopSize(size(mobile: 20.diagonal, tablet: 10.diagonal), 25),
                         dialogWidth: .9 * deviceDetails.width,
                         dialogHeight: .8 * deviceDetails.height,
                         borderRadius: BorderRadius.circular(7.r),
@@ -227,7 +227,7 @@ class _NiceTextFormState extends State<NiceTextForm> with AfterLayout {
                           return Material(
                             color: Colors.transparent,
                             child: NiceTextForm(
-                              height: desktopSize(50.w, 50),
+                              height: desktopSize(size(mobile: 50.w, tablet: 33.w), 50),
                               padding: EdgeInsets.symmetric( horizontal: desktopSize(15.w, 15)),
                               boxDecoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12.r),

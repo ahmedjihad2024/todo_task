@@ -30,7 +30,7 @@ class TaskCard extends StatelessWidget {
             right: desktopSize(10.w, 10),
             top: desktopSize(10.w, 10),
             bottom: desktopSize(10.w, 10)),
-        height: desktopSize(110.w, 120),
+        height: desktopSize(size(mobile: 110.w, tablet: 85.w), 120),
         alignment: Alignment.center,
         child: Row(
           children: [
@@ -39,8 +39,8 @@ class TaskCard extends StatelessWidget {
               clipBehavior: Clip.hardEdge,
               child: CachedNetworkImage(
                 imageUrl: "${Constants.baseUrl}images/${details.image}",
-                width: desktopSize(80.w, 85),
-                height: desktopSize(80.w, 85),
+                width: desktopSize(size(mobile: 80.w, tablet: 65.w), 85),
+                height: desktopSize(size(mobile: 80.w, tablet: 65.w), 85),
                 fit: BoxFit.cover,
               ),
             ),
@@ -58,7 +58,7 @@ class TaskCard extends StatelessWidget {
                         child: Text(
                           details.title,
                           style: context.small.copyWith(
-                              fontSize: desktopSize(22.sp, 22),
+                              fontSize: desktopSize(size(mobile: 22.sp, tablet: 18.sp), 22),
                               height: 1,
                               color: context.colorScheme.onPrimary,
                               overflow: TextOverflow.ellipsis,
@@ -75,7 +75,7 @@ class TaskCard extends StatelessWidget {
                         child: Text(
                           getTaskStateText(details.status),
                           style: context.small.copyWith(
-                              fontSize: desktopSize(14.sp, 14),
+                              fontSize: desktopSize(size(mobile: 14.sp, tablet: 12.sp), 14),
                               height: 1,
                               color: getTaskStateColor(details.status),
                               fontWeight: FontWeight.w500),
@@ -91,7 +91,7 @@ class TaskCard extends StatelessWidget {
                     details.description.split("\n").first,
                     softWrap: false,
                     style: context.small.copyWith(
-                        fontSize: desktopSize(17.sp, 17),
+                        fontSize: desktopSize(size(mobile: 17.sp, tablet: 15.sp), 17),
                         height: 1,
                         color: context.colorScheme.onPrimary.withOpacity(.3),
                         overflow: TextOverflow.ellipsis,
@@ -109,7 +109,7 @@ class TaskCard extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.flag_outlined,
-                            size: desktopSize(25.sp, 25),
+                            size: desktopSize(size(mobile: 25.sp, tablet: 18.sp), 25),
                             color: getTaskPriorityColor(details.priority),
                           ),
                           SizedBox(
@@ -128,7 +128,7 @@ class TaskCard extends StatelessWidget {
                         DateFormat("yyyy-MM-dd", context.locale.languageCode)
                             .format(details.createdAt),
                         style: context.small.copyWith(
-                            fontSize: desktopSize(14.sp, 14),
+                            fontSize: desktopSize(size(mobile: 14.sp, tablet: 11.sp), 14),
                             color:
                                 context.colorScheme.onPrimary.withOpacity(.3),
                             fontWeight: FontWeight.w500),
@@ -164,7 +164,7 @@ class TaskCard extends StatelessWidget {
                         child: Text(
                           Translation.edit.tr,
                           style: context.small.copyWith(
-                              fontSize: desktopSize(17.sp, 17),
+                              fontSize: desktopSize(size(mobile: 17.sp, tablet: 13.sp), 17),
                               color: context.colorScheme.onPrimary,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.w400),
@@ -175,7 +175,7 @@ class TaskCard extends StatelessWidget {
                         child: Text(
                           Translation.delete.tr,
                           style: context.small.copyWith(
-                              fontSize: desktopSize(17.sp, 17),
+                              fontSize: desktopSize(size(mobile: 17.sp, tablet: 13.sp), 17),
                               color: context.colorScheme.onPrimary,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.w400),

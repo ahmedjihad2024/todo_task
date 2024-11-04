@@ -51,11 +51,13 @@ class LoginPhoneStyle extends StatelessWidget {
                   Text(
                     Translation.login.tr,
                     style: context.small.copyWith(
-                        fontSize: 33.sp,
+                        fontSize: size(mobile: 33.sp, tablet: 28.sp),
                         fontWeight: FontWeight.w700,
                         color: context.colorScheme.onPrimary),
                   ),
-                  20.verticalSpace,
+                  SizedBox(
+                    height: size(mobile: 20.w, tablet: 15.w),
+                  ),
                   PhoneForm(
                     focusNode: numberFocus,
                     controller: numberController,
@@ -63,7 +65,9 @@ class LoginPhoneStyle extends StatelessWidget {
                       onCountryCodeChange(code.dialCode);
                     },
                   ),
-                  10.verticalSpace,
+                  SizedBox(
+                    height: size(mobile: 10.w, tablet: 5.w),
+                  ),
                   SimpleForm(
                     focusNode: passwordFocus,
                     hintText: Translation.password.tr,
@@ -82,17 +86,19 @@ class LoginPhoneStyle extends StatelessWidget {
                           isSecure
                               ? Icons.visibility_off_outlined
                               : Icons.visibility_outlined,
-                          size: 25.sp,
+                          size: size(mobile: 25.sp, tablet: 20.sp),
                         ),
                       );
                     },
                   ),
-                  15.verticalSpace,
+                  SizedBox(
+                    height: size(mobile: 15.w, tablet: 10.w),
+                  ),
                   TextButton(
                     onPressed: onClick,
                     style: ButtonStyle(
                         minimumSize:
-                            WidgetStatePropertyAll(Size(double.infinity, 50.w)),
+                            WidgetStatePropertyAll(Size(double.infinity, size(mobile: 50.w, tablet: 35.w))),
                         backgroundColor:
                             WidgetStatePropertyAll(context.colorScheme.primary),
                         shape: WidgetStatePropertyAll(RoundedRectangleBorder(
@@ -100,12 +106,14 @@ class LoginPhoneStyle extends StatelessWidget {
                     child: Text(
                       Translation.login.tr,
                       style: context.small.copyWith(
-                          fontSize: 20.sp,
+                          fontSize: size(mobile: 20.sp, tablet: 15.sp),
                           fontWeight: FontWeight.w700,
                           color: context.theme.colorScheme.onPrimaryContainer),
                     ),
                   ),
-                  15.verticalSpace,
+                  SizedBox(
+                    height: size(mobile: 15.w, tablet: 10.w),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -113,7 +121,7 @@ class LoginPhoneStyle extends StatelessWidget {
                         Translation.did_not_have_account.tr,
                         softWrap: true,
                         style: context.small.copyWith(
-                            fontSize: 17.sp,
+                            fontSize: size(mobile: 17.sp, tablet: 14.sp),
                             fontWeight: FontWeight.w400,
                             color: context.theme.colorScheme.onPrimary
                                 .withOpacity(.4)),
@@ -127,7 +135,7 @@ class LoginPhoneStyle extends StatelessWidget {
                         child: Text(
                           Translation.sign_up_here.tr,
                           style: context.small.copyWith(
-                              fontSize: 17.sp,
+                              fontSize: size(mobile: 17.sp, tablet: 14.sp),
                               fontWeight: FontWeight.w600,
                               color: context.theme.colorScheme.primary),
                         ),

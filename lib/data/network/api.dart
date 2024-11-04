@@ -152,6 +152,7 @@ class AppServices implements AppServicesClientAbs {
   Future<TaskDetailsResponse> getTaskById(String id) async {
     Response response =
         await _dio.request("todos/$id", method: RequestMethod.GET);
+    if(response.data.toString().trim().isEmpty) throw "This task is not exists";
     return TaskDetailsResponse.fromJson(response.data as Map<String, dynamic>);
   }
 

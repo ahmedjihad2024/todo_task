@@ -1,9 +1,7 @@
-
-
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:responsive_ui/responsive_ui.dart';
@@ -30,10 +28,9 @@ class _ProfileViewState extends State<ProfileView> with AfterLayout {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.only(
-            top: desktopSize(20.w, 20),
-            left: desktopSize(20.w, 20),
-            right: desktopSize(20.w, 20)
-          ),
+              top: desktopSize(20.w, 20),
+              left: desktopSize(20.w, 20),
+              right: desktopSize(20.w, 20)),
           child: Column(
             children: [
               Row(
@@ -46,20 +43,21 @@ class _ProfileViewState extends State<ProfileView> with AfterLayout {
                         angle: 180 * pi / 180,
                         child: SvgPicture.asset(
                           SvgManager.arrowLeft,
-                          width: desktopSize(23.w, 25),
+                          width:
+                              desktopSize(size(mobile: 23.w, tablet: 19.w), 25),
                           colorFilter: ColorFilter.mode(
-                              context.colorScheme.onPrimary,
-                              BlendMode.srcIn),
+                              context.colorScheme.onPrimary, BlendMode.srcIn),
                         ),
                       )),
                   SizedBox(
                     width: desktopSize(15.w, 15),
                   ),
                   Text(
-                   Translation.profile_details.tr,
+                    Translation.profile_details.tr,
                     style: context.small.copyWith(
                         fontWeight: FontWeight.w700,
-                        fontSize: desktopSize(20.sp, 20),
+                        fontSize:
+                            desktopSize(size(mobile: 20.sp, tablet: 18.sp), 20),
                         color: context.colorScheme.onPrimary),
                   )
                 ],
@@ -83,25 +81,47 @@ class _ProfileViewState extends State<ProfileView> with AfterLayout {
                                   state.details!.level.name,
                                   state.details!.yearsExperience,
                                   state.details!.address,
-                                ].map((e){
+                                ].map((e) {
                                   return Container(
                                     width: double.infinity,
                                     padding: EdgeInsets.symmetric(
-                                      vertical: desktopSize(15.w, 15),
-                                      horizontal: desktopSize(10.w, 10)
-                                    ),
+                                        vertical: desktopSize(size(mobile: 15.w, tablet: 10.w), 15),
+                                        horizontal: desktopSize(10.w, 10)),
                                     margin: EdgeInsets.only(
-                                      bottom: desktopSize(10.w, 10)
-                                    ),
+                                        bottom: desktopSize(10.w, 10)),
                                     decoration: BoxDecoration(
-                                      color: context.colorScheme.onPrimary.withOpacity(.08),
-                                      borderRadius: BorderRadius.circular(10.r)
+                                        color: context.colorScheme.onPrimary
+                                            .withOpacity(.08),
+                                        borderRadius:
+                                            BorderRadius.circular(10.r)),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          e.toString(),
+                                          style: context.small.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: context
+                                                  .colorScheme.onPrimary
+                                                  .withOpacity(.4),
+                                              fontSize: desktopSize(size(mobile: 20.sp, tablet: 14.sp), 18)),
+                                        ),
+                                        if (e == state.details!.phone)
+                                          IconButton(
+                                              onPressed: () {
+                                                Clipboard.setData(ClipboardData(text: e));
+                                              },
+                                              icon: Icon(
+                                                Icons.copy_rounded,
+                                                size: desktopSize(
+                                                    size(
+                                                        mobile: 25.sp,
+                                                        tablet: 20.sp),
+                                                    20),
+                                              ))
+                                      ],
                                     ),
-                                    child: Text(e.toString(), style: context.small.copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      color: context.colorScheme.onPrimary.withOpacity(.4),
-                                      fontSize: desktopSize(20.sp, 18)
-                                    ),),
                                   );
                                 })
                               ],
@@ -120,11 +140,12 @@ class _ProfileViewState extends State<ProfileView> with AfterLayout {
                           ),
                         );
                       },
-                      error: (){
+                      error: () {
                         return Expanded(
                           child: Center(
                             child: Padding(
-                              padding: EdgeInsets.all(desktopSize(20.w, 20)),
+                              padding:
+                              EdgeInsets.all(desktopSize(20.w, 20)),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -133,31 +154,43 @@ class _ProfileViewState extends State<ProfileView> with AfterLayout {
                                     textAlign: TextAlign.center,
                                     style: context.small.copyWith(
                                         fontWeight: FontWeight.w600,
-                                        color: context.colorScheme.onPrimary,
-                                        fontSize: desktopSize(18.w, 18)),
+                                        color:
+                                        context.colorScheme.onPrimary,
+                                        fontSize: desktopSize(
+                                            size(
+                                                mobile: 18.sp,
+                                                tablet: 13.sp),
+                                            18)),
                                   ),
-                                  SizedBox(
-                                    height: desktopSize(5.w, 5),
-                                  ),
+                                  5.verticalSpace,
                                   TextButton(
-                                    onPressed: (){
+                                    onPressed: () {
                                       context.read<ProfileBloc>().add(GetProfileDetails());
                                     },
                                     style: ButtonStyle(
-                                        backgroundColor: WidgetStatePropertyAll(
-                                            context.colorScheme.primary),
-                                        padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: desktopSize(20.w, 20))),
+                                        backgroundColor:
+                                        WidgetStatePropertyAll(context
+                                            .colorScheme.primary),
+                                        padding: WidgetStatePropertyAll(
+                                            EdgeInsets.symmetric(
+                                                horizontal:
+                                                desktopSize(20.w, 20))),
                                         shape: WidgetStatePropertyAll(
                                             RoundedRectangleBorder(
                                                 borderRadius:
-                                                BorderRadius.circular(10.r)))),
+                                                BorderRadius.circular(
+                                                    10.r)))),
                                     child: Text(
                                       Translation.try_again.tr,
                                       style: context.small.copyWith(
-                                          fontSize: desktopSize(18.sp, 16),
+                                          fontSize: desktopSize(
+                                              size(
+                                                  mobile: 18.sp,
+                                                  tablet: 12.sp),
+                                              16),
                                           fontWeight: FontWeight.w700,
-                                          color: context
-                                              .theme.colorScheme.onPrimaryContainer),
+                                          color: context.theme.colorScheme
+                                              .onPrimaryContainer),
                                     ),
                                   ),
                                 ],

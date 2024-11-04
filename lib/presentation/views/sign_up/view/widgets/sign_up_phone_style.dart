@@ -75,14 +75,18 @@ class SignUpPhoneStyle extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                         color: context.colorScheme.onPrimary),
                   ),
-                  20.verticalSpace,
+                  SizedBox(
+                    height: size(mobile: 20.w, tablet: 15.w),
+                  ),
                   SimpleForm(
                     focusNode: nameFocus,
                     hintText: Translation.name.tr,
                     keyboardType: TextInputType.name,
                     controller: nameController,
                   ),
-                  10.verticalSpace,
+                  SizedBox(
+                    height: size(mobile: 10.w, tablet: 5.w),
+                  ),
                   PhoneForm(
                     focusNode: numberFocus,
                     controller: numberController,
@@ -90,18 +94,20 @@ class SignUpPhoneStyle extends StatelessWidget {
                       onCountryCodeChnage(code.dialCode);
                     },
                   ),
-                  10.verticalSpace,
+                  SizedBox(
+                    height: size(mobile: 10.w, tablet: 5.w),
+                  ),
                   Row(
                     children: [
                       Expanded(
                         child: Container(
-                          height: 50.w,
+                          height: size(mobile: 50.w, tablet: 35.w),
                           width: double.infinity,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                               color:
                               context.colorScheme.onPrimaryContainer,
-                              borderRadius: BorderRadius.circular(13.r),
+                              borderRadius: BorderRadius.circular(size(mobile: 13.r, tablet: 8.r)),
                               border: Border.all(
                                   color: context.colorScheme.onPrimary
                                       .withOpacity(.2),
@@ -121,12 +127,12 @@ class SignUpPhoneStyle extends StatelessWidget {
                             EdgeInsets.symmetric(horizontal: 13.w),
                             icon: Icon(
                               Icons.keyboard_arrow_down_rounded,
-                              size: 40.sp,
+                              size: size(mobile: 40.sp, tablet: 25.sp),
                               color: context.colorScheme.onPrimary
                                   .withOpacity(.3),
                             ),
                             elevation: 16,
-                            menuWidth: 140.w,
+                            menuWidth:  size(mobile: 140.w, tablet: 100.w),
                             menuMaxHeight: .6 * deviceDetails.height,
                             style: context.small.copyWith(
                                 fontSize: 16.sp,
@@ -145,7 +151,7 @@ class SignUpPhoneStyle extends StatelessWidget {
                                     child: Text(
                                       value.name,
                                       style: context.small.copyWith(
-                                          fontSize: 18.sp,
+                                          fontSize: size(mobile: 18.sp, tablet: 14.sp),
                                           fontWeight: FontWeight.w400,
                                           color:
                                           context.colorScheme.onPrimary),
@@ -155,13 +161,15 @@ class SignUpPhoneStyle extends StatelessWidget {
                           ),
                         ),
                       ),
-                      10.horizontalSpace,
+                      SizedBox(
+                        width: size(mobile: 10.w, tablet: 5.w),
+                      ),
                       Container(
-                        height: 50.w,
+                        height: size(mobile: 50.w, tablet: 35.w),
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                             color: context.colorScheme.onPrimaryContainer,
-                            borderRadius: BorderRadius.circular(13.r),
+                            borderRadius: BorderRadius.circular(size(mobile: 13.r, tablet: 8.r)),
                             border: Border.all(
                                 color: context.colorScheme.onPrimary
                                     .withOpacity(.2),
@@ -179,15 +187,15 @@ class SignUpPhoneStyle extends StatelessWidget {
                           padding: EdgeInsets.symmetric(horizontal: 13.w),
                           icon: Icon(
                             Icons.keyboard_arrow_down_rounded,
-                            size: 40.sp,
+                            size: size(mobile: 40.sp, tablet: 25.sp),
                             color: context.colorScheme.onPrimary
                                 .withOpacity(.3),
                           ),
                           elevation: 16,
-                          menuWidth: 140.w,
+                          menuWidth: size(mobile: 140.w, tablet: 50.w),
                           menuMaxHeight: .6 * deviceDetails.height,
                           style: context.small.copyWith(
-                              fontSize: 16.sp,
+                              fontSize: size(mobile: 16.sp, tablet: 12.sp),
                               fontWeight: FontWeight.w400,
                               color: context.colorScheme.onPrimary),
                           underline: Container(
@@ -202,7 +210,7 @@ class SignUpPhoneStyle extends StatelessWidget {
                               child: Text(
                                 value.toString(),
                                 style: context.small.copyWith(
-                                    fontSize: 18.sp,
+                                    fontSize: size(mobile: 18.sp, tablet: 14.sp),
                                     fontWeight: FontWeight.w400,
                                     color: context.colorScheme.onPrimary),
                               ),
@@ -212,14 +220,18 @@ class SignUpPhoneStyle extends StatelessWidget {
                       ),
                     ],
                   ),
-                  10.verticalSpace,
+                  SizedBox(
+                    height: size(mobile: 10.w, tablet: 5.w),
+                  ),
                   SimpleForm(
                     focusNode: addressFocus,
                     hintText: Translation.address.tr,
                     keyboardType: TextInputType.streetAddress,
                     controller: addressController,
                   ),
-                  10.verticalSpace,
+                  SizedBox(
+                    height: size(mobile: 10.w, tablet: 5.w),
+                  ),
                   SimpleForm(
                     focusNode: passwordFocus,
                     hintText: Translation.password.tr,
@@ -238,17 +250,19 @@ class SignUpPhoneStyle extends StatelessWidget {
                           isSecure
                               ? Icons.visibility_off_outlined
                               : Icons.visibility_outlined,
-                          size: 25.sp,
+                          size: size(mobile: 25.sp, tablet: 20.sp),
                         ),
                       );
                     },
                   ),
-                  15.verticalSpace,
+                  SizedBox(
+                    height: size(mobile: 10.w, tablet: 5.w),
+                  ),
                   TextButton(
                     onPressed: onClick,
                     style: ButtonStyle(
                         minimumSize: WidgetStatePropertyAll(
-                            Size(double.infinity, 50.w)),
+                            Size(double.infinity, size(mobile: 50.w, tablet: 35.w))),
                         backgroundColor: WidgetStatePropertyAll(
                             context.colorScheme.primary),
                         shape: WidgetStatePropertyAll(
@@ -258,13 +272,15 @@ class SignUpPhoneStyle extends StatelessWidget {
                     child: Text(
                       Translation.sign_up.tr,
                       style: context.small.copyWith(
-                          fontSize: 20.sp,
+                          fontSize: size(mobile: 20.sp, tablet: 15.sp),
                           fontWeight: FontWeight.w700,
                           color: context
                               .theme.colorScheme.onPrimaryContainer),
                     ),
                   ),
-                  15.verticalSpace,
+                  SizedBox(
+                    height: size(mobile: 15.w, tablet: 10.w),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -272,7 +288,7 @@ class SignUpPhoneStyle extends StatelessWidget {
                         Translation.already_have_account.tr,
                         softWrap: true,
                         style: context.small.copyWith(
-                            fontSize: 17.sp,
+                            fontSize: size(mobile: 17.sp, tablet: 14.sp),
                             fontWeight: FontWeight.w400,
                             color: context.theme.colorScheme.onPrimary
                                 .withOpacity(.4)),
@@ -285,7 +301,7 @@ class SignUpPhoneStyle extends StatelessWidget {
                         child: Text(
                           Translation.sign_in.tr,
                           style: context.small.copyWith(
-                              fontSize: 17.sp,
+                              fontSize: size(mobile: 17.sp, tablet: 14.sp),
                               fontWeight: FontWeight.w600,
                               color: context.theme.colorScheme.primary),
                         ),

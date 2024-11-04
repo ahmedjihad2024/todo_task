@@ -51,7 +51,10 @@ class _CaptureWidgetState extends State<CaptureWidget> with AfterLayout {
         RenderRepaintBoundary boundary = _globalKey.currentContext!
             .findRenderObject() as RenderRepaintBoundary;
 
-        ui.Image image = await boundary.toImage(pixelRatio: 10.0);
+        ui.Image originalSize = await boundary.toImage(pixelRatio: 1);
+        double newPixelRatio = 1024 / originalSize.width;
+
+        ui.Image image = await boundary.toImage(pixelRatio: newPixelRatio);
         ByteData? byteData =
             await image.toByteData(format: ui.ImageByteFormat.png);
         return byteData!.buffer.asUint8List();

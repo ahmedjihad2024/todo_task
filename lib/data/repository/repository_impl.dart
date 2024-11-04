@@ -110,8 +110,8 @@ class Repository implements RepositoryAbs{
       try{
         var response = await _dataSource.getTaskById(id);
         return Right(response.toDomain);
-      }on Exception catch(e){
-        return Left(e.handle);
+      }catch(exception){
+        return Left(exception.handle);
       }
     }else{
       return const Left(NoInternetConnection());

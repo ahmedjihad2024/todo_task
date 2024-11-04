@@ -51,12 +51,24 @@ class TaskDetailsBloc extends Bloc<TaskDetailsEvent, TaskDetailsState> {
 
 
   FutureOr<void> _saveQrAsImage(SaveQrAsImage event, Emitter<TaskDetailsState> emit) async {
-    if((await Permission.manageExternalStorage.status).isDenied && !Platform.isWindows ){
-      var result = await [
-        Permission.manageExternalStorage
-      ].request();
-      if (!result[Permission.manageExternalStorage]!.isGranted) return;
+    emit(
+        state.copy(
+            reqState: ReqState.loading,
+        )
+    );
+    if(!Platform.isWindows ){
+      bool storageStatus = await _checkAndRequestStoragePermission();
+      if(!storageStatus){
+        emit(
+            state.copy(
+              reqState: ReqState.toastError,
+                errorMessage: "No permission accepted"
+            )
+        );
+        return;
+      }
     }
+
     var directory = Platform.isWindows ? (await getDownloadsDirectory())! : Directory("/storage/emulated/0/Download");
     if(!(await directory.exists())) await directory.create();
     await event.controller.captureAndSaveAsImage(path: directory.path);
@@ -66,5 +78,33 @@ class TaskDetailsBloc extends Bloc<TaskDetailsEvent, TaskDetailsState> {
             errorMessage: "Image Saved"
         )
     );
+  }
+
+
+  Future<bool> _checkAndRequestStoragePermission() async {
+    bool storageStatus = await Permission.storage.isGranted;
+
+    if (!storageStatus) {
+      var result = await Permission.storage.request();
+
+      if (result.isGranted) {
+        return true;
+      } else {
+        if (await Permission.manageExternalStorage.isRestricted ||
+            await Permission.manageExternalStorage.isDenied) {
+          result = await Permission.manageExternalStorage.request();
+
+          if (result.isGranted) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return true;
+        }
+      }
+    } else {
+      return true;
+    }
   }
 }

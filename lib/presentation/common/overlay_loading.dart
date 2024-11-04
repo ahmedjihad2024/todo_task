@@ -6,11 +6,14 @@ import 'package:todo_task/presentation/res/color_manager.dart';
 class OverlayLoading {
   final BuildContext _context;
   OverlayEntry? overlayEntry;
+  bool _isLoading = false;
+  bool get isLoadingActive => _isLoading;
   late Future<void> Function() _hideFunction;
 
   OverlayLoading(this._context,);
 
   void showLoading() {
+    _isLoading = true;
     overlayEntry = OverlayEntry(
         builder: (con) => Theme(
             data: Theme.of(_context),
@@ -19,17 +22,20 @@ class OverlayLoading {
   }
 
   Future<void> hideLoading() async {
-    try{
-      await _hideFunction();
-    }catch(e){
-      Timer.periodic(const Duration(milliseconds: 100), (t) async{
-        try{
-          await _hideFunction();
-          t.cancel();
-        }catch(e){
-          print(e);
-        }
-      });
+    if(_isLoading){
+      _isLoading = false;
+      try{
+        await _hideFunction();
+      }catch(e){
+        Timer.periodic(const Duration(milliseconds: 100), (t) async{
+          try{
+            await _hideFunction();
+            t.cancel();
+          }catch(e){
+            print(e);
+          }
+        });
+      }
     }
   }
 

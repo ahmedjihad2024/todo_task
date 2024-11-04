@@ -44,6 +44,7 @@ class _SplashViewState extends State<SplashView> with AfterLayout {
         width: desktopSize(
             size(
               mobile: 200.w,
+              tablet: 100.w
             ),
             150),
       )),

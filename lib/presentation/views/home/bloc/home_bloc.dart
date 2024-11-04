@@ -41,7 +41,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<ApplyFilterEvent>(_applyFilterEvent);
     on<LogoutEvent>(_logout);
     on<CloseStreams>(_closeStreams);
-
     on<GetTaskById>(_getTaskById);
 
     _getTodosUsecase = GetTodosUsecase(_repository);
@@ -132,15 +131,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Either<Failure, void> result =
         await _deleteTaskUsecase.execute(event.taskDetails.id);
 
-    result.fold((left) {}, (right) {
-      var newData = filterTasks(
-          _groupOfTaskDetails
-              .where((t) => t.id != event.taskDetails.id)
-              .toList(),
-          _filter);
+    result.fold((left) {
+      _toastController.add(left.userMessage);
+    }, (right) {
       _groupOfTaskDetails = _groupOfTaskDetails
           .where((t) => t.id != event.taskDetails.id)
           .toList();
+      var newData = filterTasks(_groupOfTaskDetails,
+          _filter);
       emit(state.copy(
           tasksGroup: newData,
           errorMessage: newData.isEmpty ? "No Tasks" : null,

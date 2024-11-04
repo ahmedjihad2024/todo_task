@@ -15,7 +15,7 @@ extension ApiErrorTypeFailure on ApiErrorType {
   }
 }
 
-extension ErrorHandler on Exception {
+extension ErrorHandler on dynamic {
   Failure get handle {
     return switch (this) {
       // Dio Errors
@@ -100,7 +100,8 @@ enum DioErrorType {
 }
 
 enum ApiErrorType {
-  UNAUTHORIZED_INVALID_PASSWORD_OR_EMAIL(401, "يوجد خطأ في رقم الهاتف أو كلمة المرور"),
+  UNAUTHORIZED_INVALID_PASSWORD_OR_EMAIL(
+      401, "يوجد خطأ في رقم الهاتف أو كلمة المرور"),
   BAD_REQUEST_USER_EXISTS(422, "رقم الهاتف مستخدم بالفعل"),
   ACCESS_TOKEN_FORBIDDEN(403, "Forbidden");
 
@@ -111,7 +112,8 @@ enum ApiErrorType {
 
   static ApiErrorType? from(dynamic statusCode, String message) {
     for (var e in ApiErrorType.values) {
-      if (e.message.toLowerCase() == message.toLowerCase() && e.statusCode == statusCode) {
+      if (e.message.toLowerCase() == message.toLowerCase() &&
+          e.statusCode == statusCode) {
         return e;
       }
     }

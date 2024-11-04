@@ -71,9 +71,8 @@ class _HomeViewState extends State<HomeView> with AfterLayout {
               Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal:  desktopSize(20.w, 20)
-                    ),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: desktopSize(20.w, 20)),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -83,7 +82,8 @@ class _HomeViewState extends State<HomeView> with AfterLayout {
                             SvgPicture.asset(
                               SvgManager.appName,
                               colorFilter: ColorFilter.mode(
-                                  context.colorScheme.onPrimary, BlendMode.srcIn),
+                                  context.colorScheme.onPrimary,
+                                  BlendMode.srcIn),
                               width: desktopSize(
                                   size(
                                     mobile: 60.w,
@@ -93,7 +93,8 @@ class _HomeViewState extends State<HomeView> with AfterLayout {
                             const Spacer(),
                             IconButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed(RoutesManager.profileDetails.route);
+                                  Navigator.of(context).pushNamed(
+                                      RoutesManager.profileDetails.route);
                                 },
                                 icon: Icon(
                                   Icons.person,
@@ -103,9 +104,11 @@ class _HomeViewState extends State<HomeView> with AfterLayout {
                             IconButton(
                                 onPressed: () {
                                   overlayLoading.showLoading();
-                                  context.read<HomeBloc>().add(LogoutEvent((){
-                                    Navigator.of(context).pushNamedAndRemoveUntil(
-                                        RoutesManager.login.route, (_) => false);
+                                  context.read<HomeBloc>().add(LogoutEvent(() {
+                                    Navigator.of(context)
+                                        .pushNamedAndRemoveUntil(
+                                            RoutesManager.login.route,
+                                            (_) => false);
                                     overlayLoading.hideLoading();
                                   }));
                                 },
@@ -116,15 +119,18 @@ class _HomeViewState extends State<HomeView> with AfterLayout {
                                 ))
                           ],
                         ),
-                        10.verticalSpace,
+                        SizedBox(
+                          height: size(mobile: 10.w, tablet: 5.w),
+                        ),
                         Row(
                           children: [
                             Text(
                               Translation.my_tasks.tr,
                               style: context.small.copyWith(
-                                  fontSize: desktopSize(20.sp, 20),
-                                  color:
-                                  context.colorScheme.onPrimary.withOpacity(.3),
+                                  fontSize: desktopSize(
+                                      size(mobile: 20.sp, tablet: 16.sp), 20),
+                                  color: context.colorScheme.onPrimary
+                                      .withOpacity(.3),
                                   fontWeight: FontWeight.w700),
                             ),
                           ],
@@ -134,7 +140,9 @@ class _HomeViewState extends State<HomeView> with AfterLayout {
                           initialSelection: TaskState.all,
                           onSelectedTap: (state) {
                             // selectedState = state;
-                            context.read<HomeBloc>().add(ApplyFilterEvent(state));
+                            context
+                                .read<HomeBloc>()
+                                .add(ApplyFilterEvent(state));
                           },
                         ),
                       ],
@@ -165,7 +173,7 @@ class _HomeViewState extends State<HomeView> with AfterLayout {
                                   child: SingleChildScrollView(
                                     child: Column(
                                       children: [
-                                        ...state.tasksGroup.map((item){
+                                        ...state.tasksGroup.map((item) {
                                           return TaskCard(item);
                                         })
                                       ],
@@ -192,55 +200,74 @@ class _HomeViewState extends State<HomeView> with AfterLayout {
                                   style: context.small.copyWith(
                                       fontWeight: FontWeight.w600,
                                       color: context.colorScheme.onPrimary,
-                                      fontSize: desktopSize(18.sp, 18)),
+                                      fontSize: desktopSize(
+                                          size(mobile: 18.sp, tablet: 14.sp),
+                                          18)),
                                 ),
                               ),
                             );
                           },
-                      error: (){
-                        return Expanded(
-                          child: Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(desktopSize(20.w, 20)),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    state.errorMessage!,
-                                    textAlign: TextAlign.center,
-                                    style: context.small.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        color: context.colorScheme.onPrimary,
-                                        fontSize: desktopSize(18.sp, 18)),
+                          error: () {
+                            return Expanded(
+                              child: Center(
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.all(desktopSize(20.w, 20)),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        state.errorMessage!,
+                                        textAlign: TextAlign.center,
+                                        style: context.small.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color:
+                                                context.colorScheme.onPrimary,
+                                            fontSize: desktopSize(
+                                                size(
+                                                    mobile: 18.sp,
+                                                    tablet: 13.sp),
+                                                18)),
+                                      ),
+                                      5.verticalSpace,
+                                      TextButton(
+                                        onPressed: () {
+                                          context
+                                              .read<HomeBloc>()
+                                              .add(RefreshTasksEvent());
+                                        },
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                WidgetStatePropertyAll(context
+                                                    .colorScheme.primary),
+                                            padding: WidgetStatePropertyAll(
+                                                EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        desktopSize(20.w, 20))),
+                                            shape: WidgetStatePropertyAll(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.r)))),
+                                        child: Text(
+                                          Translation.try_again.tr,
+                                          style: context.small.copyWith(
+                                              fontSize: desktopSize(
+                                                  size(
+                                                      mobile: 18.sp,
+                                                      tablet: 12.sp),
+                                                  16),
+                                              fontWeight: FontWeight.w700,
+                                              color: context.theme.colorScheme
+                                                  .onPrimaryContainer),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  5.verticalSpace,
-                                  TextButton(
-                                    onPressed: (){
-                                      context.read<HomeBloc>().add(RefreshTasksEvent());
-                                    },
-                                    style: ButtonStyle(
-                                        backgroundColor: WidgetStatePropertyAll(
-                                            context.colorScheme.primary),
-                                        padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: desktopSize(20.w, 20))),
-                                        shape: WidgetStatePropertyAll(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                BorderRadius.circular(10.r)))),
-                                    child: Text(
-                                      Translation.try_again.tr,
-                                      style: context.small.copyWith(
-                                          fontSize: desktopSize(18.sp, 16),
-                                          fontWeight: FontWeight.w700,
-                                          color: context
-                                              .theme.colorScheme.onPrimaryContainer),
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                        );
-                      });
+                            );
+                          });
                     },
                   )
                 ],
@@ -259,8 +286,11 @@ class _HomeViewState extends State<HomeView> with AfterLayout {
                             await startQrScanner(context);
                           },
                           style: ButtonStyle(
-                              minimumSize:
-                                  WidgetStatePropertyAll(Size(desktopSize(50.w, 50), desktopSize(50.w, 50))),
+                              minimumSize: WidgetStatePropertyAll(Size(
+                                  desktopSize(
+                                      size(mobile: 50.w, tablet: 35.w), 50),
+                                  desktopSize(
+                                      size(mobile: 50.w, tablet: 35.w), 50))),
                               padding:
                                   const WidgetStatePropertyAll(EdgeInsets.zero),
                               backgroundColor: WidgetStatePropertyAll(context
@@ -268,7 +298,8 @@ class _HomeViewState extends State<HomeView> with AfterLayout {
                                   .withOpacity(.1))),
                           child: Icon(
                             Icons.qr_code_2_rounded,
-                            size: desktopSize(40.sp, 25),
+                            size: desktopSize(
+                                size(mobile: 40.sp, tablet: 25.sp), 25),
                             color: context.colorScheme.primary,
                           )),
                       10.verticalSpace,
@@ -278,18 +309,22 @@ class _HomeViewState extends State<HomeView> with AfterLayout {
                                 .pushNamed(RoutesManager.addNewTask.route);
                           },
                           style: ButtonStyle(
-                              fixedSize:
-                                  WidgetStatePropertyAll(Size(desktopSize(60.w, 60), desktopSize(60.w, 60))),
+                              fixedSize: WidgetStatePropertyAll(Size(
+                                  desktopSize(
+                                      size(mobile: 60.w, tablet: 45.w), 60),
+                                  desktopSize(
+                                      size(mobile: 60.w, tablet: 45.w), 60))),
                               backgroundColor: WidgetStatePropertyAll(
                                   context.colorScheme.primary),
-                              padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+                              padding:
+                                  const WidgetStatePropertyAll(EdgeInsets.zero),
                               shadowColor: WidgetStatePropertyAll(context
                                   .colorScheme.onPrimary
                                   .withOpacity(.7)),
                               elevation: const WidgetStatePropertyAll(10)),
                           child: Icon(
                             Icons.add,
-                            size: desktopSize(40.sp, 30),
+                            size: desktopSize(size(mobile: 40.sp, tablet: 35.sp), 30),
                             color: context.colorScheme.onPrimaryContainer,
                           ))
                     ],
@@ -304,12 +339,14 @@ class _HomeViewState extends State<HomeView> with AfterLayout {
   }
 
   Future<void> startQrScanner(BuildContext context) async {
-    if(Platform.isWindows){
-      Navigator.of(context)
-          .pushNamed(RoutesManager.qrScanner.route).then((id){
-        if(id != null) context.read<HomeBloc>().add(GetTaskById(id.toString(), overlayLoading));
+    if (Platform.isWindows) {
+      Navigator.of(context).pushNamed(RoutesManager.qrScanner.route).then((id) {
+        if (id != null)
+          context
+              .read<HomeBloc>()
+              .add(GetTaskById(id.toString(), overlayLoading));
       });
-    }else{
+    } else {
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (scannerContext) => AiBarcodeScanner(
@@ -318,13 +355,12 @@ class _HomeViewState extends State<HomeView> with AfterLayout {
               detectionSpeed: DetectionSpeed.noDuplicates,
             ),
             onDetect: (BarcodeCapture capture) {
+              final String? scannedValue = capture.barcodes.first.rawValue;
 
-              final String? scannedValue =
-                  capture.barcodes.first.rawValue;
-
-              context.read<HomeBloc>().add(GetTaskById(scannedValue!, overlayLoading));
+              context
+                  .read<HomeBloc>()
+                  .add(GetTaskById(scannedValue!, overlayLoading));
               Navigator.of(scannerContext).pop();
-
             },
             hideSheetTitle: true,
             hideSheetDragHandler: true,
@@ -340,16 +376,16 @@ class _HomeViewState extends State<HomeView> with AfterLayout {
     if (Platform.isWindows) await windowManager.show();
     context.read<HomeBloc>().add(RefreshTasksEvent());
     overlayLoading = OverlayLoading(context);
-    context.read<HomeBloc>().toastStream().listen((toast){
+    context.read<HomeBloc>().toastStream().listen((toast) {
       showToast(
           msg: toast,
           type: ToastificationType.warning,
           context: context,
           timeInSec: 5);
     });
-    context.read<HomeBloc>().qrResult().listen((taskDetails){
-      Navigator.of(context).pushNamed(RoutesManager.taskDetails.route, arguments: taskDetails);
+    context.read<HomeBloc>().qrResult().listen((taskDetails) {
+      Navigator.of(context)
+          .pushNamed(RoutesManager.taskDetails.route, arguments: taskDetails);
     });
   }
-
 }

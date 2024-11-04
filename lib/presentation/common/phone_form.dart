@@ -29,7 +29,7 @@ class PhoneForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NiceTextForm(
-      height: desktopSize(50.w, 55),
+      height: desktopSize(size(mobile: 50.w, tablet: 35.w), 55),
       isPhoneForm: true,
       width: desktopSize(double.infinity, 300),
       showCountryCode: showCountryCode,
@@ -39,7 +39,7 @@ class PhoneForm extends StatelessWidget {
       label: label,
       boxDecoration: BoxDecoration(
           color: context.colorScheme.onPrimaryContainer,
-          borderRadius: BorderRadius.circular(13.r),
+          borderRadius: BorderRadius.circular(size(mobile: 13.r, tablet: 8.r)),
         border: Border.all(
           color: context.colorScheme.onPrimary.withOpacity(.2),
             width: .5
@@ -47,7 +47,7 @@ class PhoneForm extends StatelessWidget {
       ),
       activeBoxDecoration:  BoxDecoration(
         color: context.colorScheme.onPrimaryContainer,
-        borderRadius: BorderRadius.circular(13.r),
+        borderRadius: BorderRadius.circular(size(mobile: 13.r, tablet: 8.r)),
         border: Border.all(
             color: context.colorScheme.onPrimary,
             width: .5
@@ -64,11 +64,11 @@ class PhoneForm extends StatelessWidget {
         color: ColorManager.red,
       ),
       textStyle: context.small.copyWith(
-        fontSize:  desktopSize(16.sp, 14),
+        fontSize:  desktopSize(size(mobile: 16.sp, tablet: 14.sp), 14),
         color: ColorManager.black,
       ),
       hintStyle: context.small.copyWith(
-        fontSize: desktopSize(16.sp, 14),
+        fontSize: desktopSize(size(mobile: 16.sp, tablet: 14.sp), 14),
         color: ColorManager.black.withOpacity(.4),
       ),
 

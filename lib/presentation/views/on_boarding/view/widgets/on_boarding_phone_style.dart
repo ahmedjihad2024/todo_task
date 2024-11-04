@@ -36,28 +36,32 @@ class OnBoardingPhoneStyle extends StatelessWidget {
                         Translation.on_splash_title_one.tr,
                         textAlign: TextAlign.center,
                         style: context.small.copyWith(
-                            fontSize: 30.sp,
+                            fontSize: size(mobile: 30.sp, tablet: 23.sp),
                             fontWeight: FontWeight.w700,
                             color: context.theme.colorScheme.onPrimary),
                       ),
-                      15.verticalSpace,
+                      SizedBox(
+                        height: size(mobile: 15.w, tablet: 8.w),
+                      ),
                       Text(
                         Translation.on_splash_title_two.tr,
                         textAlign: TextAlign.center,
                         style: context.small.copyWith(
-                            fontSize: 18.sp,
+                            fontSize: size(mobile: 18.sp, tablet: 14.sp),
                             fontWeight: FontWeight.w400,
                             color: context.theme.colorScheme.onPrimary
                                 .withOpacity(.5)),
                       ),
-                      30.verticalSpace,
+                      SizedBox(
+                        height: size(mobile: 30.w, tablet: 20.w),
+                      ),
                       Row(
                         children: [
                           Expanded(
                             child: TextButton(
                               onPressed: onClick,
                               style: ButtonStyle(
-                                  padding: WidgetStatePropertyAll(EdgeInsets.all(15.w)),
+                                  padding: WidgetStatePropertyAll(EdgeInsets.all(size(mobile: 15.w, tablet: 10.w))),
                                   backgroundColor:
                                   WidgetStatePropertyAll(context.colorScheme.primary),
                                   shape: WidgetStatePropertyAll(RoundedRectangleBorder(
@@ -70,14 +74,14 @@ class OnBoardingPhoneStyle extends StatelessWidget {
                                   Text(
                                     Translation.let_start.tr,
                                     style: context.small.copyWith(
-                                        fontSize: 22.sp,
+                                        fontSize: size(mobile: 22.sp, tablet: 17.sp),
                                         fontWeight: FontWeight.w700,
                                         color: context.theme.colorScheme.onPrimaryContainer),
                                   ),
                                   8.horizontalSpace,
                                   SvgPicture.asset(
                                     SvgManager.arrowLeft,
-                                    width: 23.w,
+                                    width: size(mobile: 23.w, tablet: 18.w),
                                   )
                                 ],
                               ),
@@ -85,7 +89,9 @@ class OnBoardingPhoneStyle extends StatelessWidget {
                           ),
                         ],
                       ),
-                      60.verticalSpace
+                      SizedBox(
+                        height: size(mobile: 60.w, tablet: 35.w),
+                      ),
                     ],
                   ),
                 ),

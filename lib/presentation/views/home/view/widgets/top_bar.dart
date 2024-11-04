@@ -31,12 +31,12 @@ class _TopBarState extends State<TopBar> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: Platform.isWindows ? MainAxisAlignment.start :  MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: Platform.isWindows || deviceDetails.deviceType == DEVICE_SIZE_TYPE.TABLET ? MainAxisAlignment.start :  MainAxisAlignment.spaceBetween,
       children: [
         ...TaskState.values.map((item) {
           return Padding(
             padding: EdgeInsets.only(
-              right: Platform.isWindows ? 8.0 : 0
+              right: Platform.isWindows || deviceDetails.deviceType == DEVICE_SIZE_TYPE.TABLET ? 10.0 : 0
             ),
             child: TextButton(
                 onPressed: () {
@@ -53,7 +53,7 @@ class _TopBarState extends State<TopBar> {
                 child: Text(
                   getTaskStateText(item),
                   style: context.small.copyWith(
-                    fontSize: desktopSize(16.sp, 16),
+                    fontSize: desktopSize(size(mobile: 16.sp, tablet: 14.sp), 16),
                     color: item == selectedState
                         ? context.colorScheme.onPrimaryContainer
                         : context.colorScheme.onPrimary.withOpacity(.5),

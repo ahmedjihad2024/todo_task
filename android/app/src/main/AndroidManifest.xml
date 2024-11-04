@@ -7,7 +7,7 @@
         tools:ignore="ScopedStorage" />
 
     <application
-        android:label="todo_task"
+        android:label="Tasky"
         android:name="${applicationName}"
         android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher"

@@ -54,6 +54,7 @@ class _TaskDetailsViewState extends State<TaskDetailsView> with AfterLayout {
         buildWhen: (_, __) => false,
         listener: (context, state) {
           if(state.errorMessage != null && state.reqState == ReqState.toastError){
+            overlayLoading.hideLoading();
             showToast(
                 msg: state.errorMessage!,
                 type: ToastificationType.warning,
@@ -108,20 +109,20 @@ class _TaskDetailsViewState extends State<TaskDetailsView> with AfterLayout {
                                         angle: 180 * pi / 180,
                                         child: SvgPicture.asset(
                                           SvgManager.arrowLeft,
-                                          width: desktopSize(23.w, 25),
+                                          width: desktopSize(size(mobile: 23.w, tablet: 19.w), 25),
                                           colorFilter: ColorFilter.mode(
                                               context.colorScheme.onPrimary,
                                               BlendMode.srcIn),
                                         ),
                                       )),
                                   SizedBox(
-                                    width: desktopSize(15.w, 15),
+                                    width: desktopSize(size(mobile: 15.w, tablet: 12.w), 15),
                                   ),
                                   Text(
                                     Translation.task_details.tr,
                                     style: context.small.copyWith(
                                         fontWeight: FontWeight.w700,
-                                        fontSize: desktopSize(20.sp, 20),
+                                        fontSize: desktopSize(size(mobile: 20.sp, tablet: 18.sp), 20),
                                         color: context.colorScheme.onPrimary),
                                   ),
                                   const Spacer(),
@@ -155,7 +156,7 @@ class _TaskDetailsViewState extends State<TaskDetailsView> with AfterLayout {
                                           child: Text(
                                             Translation.edit.tr,
                                             style: context.small.copyWith(
-                                                fontSize: desktopSize(17.sp, 16),
+                                                fontSize: desktopSize(size(mobile: 17.sp, tablet: 13.sp), 16),
                                                 color:
                                                     context.colorScheme.onPrimary,
                                                 overflow: TextOverflow.ellipsis,
@@ -167,7 +168,7 @@ class _TaskDetailsViewState extends State<TaskDetailsView> with AfterLayout {
                                           child: Text(
                                             Translation.delete.tr,
                                             style: context.small.copyWith(
-                                                fontSize: desktopSize(17.sp, 16),
+                                                fontSize: desktopSize(size(mobile: 17.sp, tablet: 13.sp), 16),
                                                 color:
                                                     context.colorScheme.onPrimary,
                                                 overflow: TextOverflow.ellipsis,
@@ -189,7 +190,7 @@ class _TaskDetailsViewState extends State<TaskDetailsView> with AfterLayout {
                                   imageUrl:
                                       "${Constants.baseUrl}images/${widget.tasksDetails.image}",
                                   width: double.infinity,
-                                  height: desktopSize(250.w, 250),
+                                  height: desktopSize(size(mobile: 250.w, tablet: 200.w), 250),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -201,7 +202,7 @@ class _TaskDetailsViewState extends State<TaskDetailsView> with AfterLayout {
                                 softWrap: true,
                                 style: context.small.copyWith(
                                     fontWeight: FontWeight.w700,
-                                    fontSize: desktopSize(30.sp, 30),
+                                    fontSize: desktopSize(size(mobile: 30.sp, tablet: 25.sp), 30),
                                     color: context.colorScheme.onPrimary),
                               ),
                               Text(
@@ -209,7 +210,7 @@ class _TaskDetailsViewState extends State<TaskDetailsView> with AfterLayout {
                                 softWrap: true,
                                 style: context.small.copyWith(
                                     fontWeight: FontWeight.w500,
-                                    fontSize: desktopSize(18.sp, 18),
+                                    fontSize: desktopSize(size(mobile: 18.sp, tablet: 14.sp), 18),
                                     color: context.colorScheme.onPrimary
                                         .withOpacity(.5)),
                               ),
@@ -217,7 +218,7 @@ class _TaskDetailsViewState extends State<TaskDetailsView> with AfterLayout {
                                 height: desktopSize(15.w, 15),
                               ),
                               Container(
-                                height: desktopSize(50.w, 50),
+                                height: desktopSize(size(mobile: 50.w, tablet: 35.w), 50),
                                 width: double.infinity,
                                 padding: EdgeInsetsDirectional.symmetric(
                                     horizontal: desktopSize(13.w, 13)),
@@ -236,13 +237,13 @@ class _TaskDetailsViewState extends State<TaskDetailsView> with AfterLayout {
                                               context.locale.languageCode)
                                           .format(widget.tasksDetails.createdAt),
                                       style: context.small.copyWith(
-                                          fontSize: desktopSize(16.sp, 16),
+                                          fontSize: desktopSize(size(mobile: 16.sp, tablet: 13.sp), 16),
                                           fontWeight: FontWeight.w600,
                                           color: context.colorScheme.onPrimary),
                                     ),
                                     Icon(
                                       Icons.date_range_rounded,
-                                      size: desktopSize(30.sp, 30),
+                                      size: desktopSize(size(mobile: 30.sp, tablet: 25.sp), 30),
                                       color: context.colorScheme.primary,
                                     )
                                   ],
@@ -252,7 +253,7 @@ class _TaskDetailsViewState extends State<TaskDetailsView> with AfterLayout {
                                 height: desktopSize(10.w, 10),
                               ),
                               Container(
-                                height: desktopSize(50.w, 50),
+                                height: desktopSize(size(mobile: 50.w, tablet: 35.w), 50),
                                 width: double.infinity,
                                 padding: EdgeInsetsDirectional.only(
                                     start: desktopSize(13.w, 13)),
@@ -270,14 +271,14 @@ class _TaskDetailsViewState extends State<TaskDetailsView> with AfterLayout {
                                       end: desktopSize(13.w, 13)),
                                   icon: Icon(
                                     Icons.arrow_drop_down_rounded,
-                                    size: desktopSize(40.sp, 25),
+                                    size: desktopSize(size(mobile: 40.sp, tablet: 25.sp), 25),
                                     color: context.colorScheme.primary,
                                   ),
                                   elevation: 16,
                                   menuWidth: desktopSize(140.w, 150),
                                   menuMaxHeight: .6 * deviceDetails.height,
                                   style: context.small.copyWith(
-                                      fontSize: desktopSize(16.sp, 16),
+                                      fontSize: desktopSize(size(mobile: 16.sp, tablet: 13.sp), 16),
                                       fontWeight: FontWeight.w600,
                                       color: context.colorScheme.primary),
                                   underline: Container(
@@ -302,7 +303,7 @@ class _TaskDetailsViewState extends State<TaskDetailsView> with AfterLayout {
                                       child: Text(
                                         getTaskStateText(value),
                                         style: context.small.copyWith(
-                                            fontSize: desktopSize(18.sp, 16),
+                                            fontSize: desktopSize(size(mobile: 18.sp, tablet: 14.sp), 16),
                                             fontWeight: FontWeight.w600,
                                             color: context.colorScheme.primary),
                                       ),
@@ -314,7 +315,7 @@ class _TaskDetailsViewState extends State<TaskDetailsView> with AfterLayout {
                                 height: desktopSize(10.w, 10),
                               ),
                               Container(
-                                height: desktopSize(50.w, 50),
+                                height: desktopSize(size(mobile: 50.w, tablet: 35.w), 50),
                                 width: double.infinity,
                                 padding: EdgeInsetsDirectional.symmetric(
                                     horizontal: desktopSize(13.w, 13)),
@@ -328,7 +329,7 @@ class _TaskDetailsViewState extends State<TaskDetailsView> with AfterLayout {
                                   children: [
                                     Icon(
                                       Icons.flag_outlined,
-                                      size: desktopSize(30.sp, 30),
+                                      size: desktopSize(size(mobile: 30.sp, tablet: 22.sp), 30),
                                       color: context.colorScheme.primary,
                                     ),
                                     SizedBox(
@@ -338,7 +339,7 @@ class _TaskDetailsViewState extends State<TaskDetailsView> with AfterLayout {
                                       getPriorityText(
                                           widget.tasksDetails.priority),
                                       style: context.small.copyWith(
-                                          fontSize: desktopSize(16.sp, 16),
+                                          fontSize: desktopSize(size(mobile: 16.sp, tablet: 13.sp), 16),
                                           fontWeight: FontWeight.w600,
                                           color: context.colorScheme.primary),
                                     ),
@@ -365,7 +366,7 @@ class _TaskDetailsViewState extends State<TaskDetailsView> with AfterLayout {
                                         child: QrImageView(
                                           data: widget.tasksDetails.id,
                                           version: QrVersions.auto,
-                                          size: desktopSize(300.w, 300),
+                                          size: desktopSize(size(mobile: 300.w, tablet: 250.w), 300),
                                           gapless: true,
                                           eyeStyle: QrEyeStyle(
                                               eyeShape: QrEyeShape.square,

@@ -119,7 +119,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
       bool isDueDateChanged =
           selectedDateTime!.compareTo(widget.taskDetails!.createdAt) != 0;
 
-      if(!isDueDateChanged && !isTitleChanged && !isPriorityChanged && !isDescriptionChanged && !isDueDateChanged) return;
+      if(!isImageChanged && !isDueDateChanged && !isTitleChanged && !isPriorityChanged && !isDescriptionChanged && !isDueDateChanged) return;
 
       context.read<AddNewTaskBloc>().add(UpdateTaskEvent(
         id: widget.taskDetails!.id,
@@ -188,7 +188,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
                                   angle: 180 * pi / 180,
                                   child: SvgPicture.asset(
                                     SvgManager.arrowLeft,
-                                    width: desktopSize(23.w, 25),
+                                    width: desktopSize(size(mobile: 23.w, tablet: 19.w), 25),
                                     colorFilter: ColorFilter.mode(
                                         context.colorScheme.onPrimary,
                                         BlendMode.srcIn),
@@ -203,7 +203,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
                                   : Translation.update.tr,
                               style: context.small.copyWith(
                                   fontWeight: FontWeight.w700,
-                                  fontSize: desktopSize(20.sp, 20),
+                                  fontSize: desktopSize(size(mobile: 20.sp, tablet: 18.sp), 20),
                                   color: context.colorScheme.onPrimary),
                             )
                           ],
@@ -262,7 +262,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
                         Text(
                           Translation.task_title.tr,
                           style: context.small.copyWith(
-                              fontSize: desktopSize(16.sp, 16),
+                              fontSize: desktopSize(size(mobile: 16.sp, tablet: 14.sp), 16),
                               fontWeight: FontWeight.w400,
                               color:
                                   context.colorScheme.onPrimary.withOpacity(.4)),
@@ -275,7 +275,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
                           keyboardType: TextInputType.text,
                           controller: titleController,
                           focusNode: titleFocus,
-                          height: desktopSize(50.w, 55),
+                          height: desktopSize(size(mobile: 50.w, tablet: 35.w), 55),
                           padding: EdgeInsets.symmetric(
                               horizontal: desktopSize(13.w, 15)),
                           width: double.infinity,
@@ -286,7 +286,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
                         Text(
                           Translation.task_description.tr,
                           style: context.small.copyWith(
-                              fontSize: desktopSize(16.sp, 16),
+                              fontSize: desktopSize(size(mobile: 16.sp, tablet: 14.sp), 16),
                               fontWeight: FontWeight.w400,
                               color:
                                   context.colorScheme.onPrimary.withOpacity(.4)),
@@ -298,7 +298,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
                           hintText: Translation.enter_description_here.tr,
                           keyboardType: TextInputType.name,
                           controller: descriptionController,
-                          height: desktopSize(200.w, 200),
+                          height: desktopSize(size(mobile: 200.w, tablet: 150.w), 200),
                           maxLines: 20,
                           textInputAction: TextInputAction.newline,
                           focusNode: descriptionFocus,
@@ -312,7 +312,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
                         Text(
                           Translation.priority.tr,
                           style: context.small.copyWith(
-                              fontSize: desktopSize(16.sp, 16),
+                              fontSize: desktopSize(size(mobile: 16.sp, tablet: 14.sp), 16),
                               fontWeight: FontWeight.w400,
                               color:
                                   context.colorScheme.onPrimary.withOpacity(.4)),
@@ -321,7 +321,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
                           height: desktopSize(5.w, 5),
                         ),
                         Container(
-                          height: desktopSize(50.w, 50),
+                          height: desktopSize(size(mobile: 50.w, tablet: 35.w), 50),
                           width: double.infinity,
                           padding: EdgeInsetsDirectional.only(
                               start: desktopSize(13.w, 13)),
@@ -334,7 +334,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
                             children: [
                               Icon(
                                 Icons.flag_outlined,
-                                size: desktopSize(30.sp, 30),
+                                size: desktopSize(size(mobile: 30.sp, tablet: 24.sp), 30),
                                 color: context.colorScheme.primary,
                               ),
                               SizedBox(
@@ -356,7 +356,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
                                   menuWidth: desktopSize(140.w, 150),
                                   menuMaxHeight: .6 * deviceDetails.height,
                                   style: context.small.copyWith(
-                                      fontSize: desktopSize(16.sp, 14),
+                                      fontSize: desktopSize(size(mobile: 16.sp, tablet: 14.sp), 14),
                                       fontWeight: FontWeight.w400,
                                       color: context.colorScheme.primary),
                                   underline: Container(
@@ -376,7 +376,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
                                       child: Text(
                                         getPriorityText(value),
                                         style: context.small.copyWith(
-                                            fontSize: desktopSize(18.sp, 14),
+                                            fontSize: desktopSize(size(mobile: 18.sp, tablet: 14.sp), 14),
                                             fontWeight: FontWeight.w500,
                                             color: context.colorScheme.primary),
                                       ),
@@ -393,7 +393,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
                         Text(
                           Translation.due_date.tr,
                           style: context.small.copyWith(
-                              fontSize: desktopSize(16.sp, 16),
+                              fontSize: desktopSize(size(mobile: 16.sp, tablet: 14.sp), 16),
                               fontWeight: FontWeight.w400,
                               color:
                                   context.colorScheme.onPrimary.withOpacity(.4)),
@@ -416,7 +416,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
                           },
                           borderRadius: BorderRadius.circular(13.r),
                           child: Container(
-                            height: desktopSize(50.w, 50),
+                            height: desktopSize(size(mobile: 50.w, tablet: 35.w), 50),
                             width: double.infinity,
                             padding: EdgeInsetsDirectional.symmetric(
                                 horizontal: desktopSize(13.w, 13)),
@@ -438,14 +438,14 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
                                               context.locale.languageCode)
                                           .format(selectedDateTime!),
                                   style: context.small.copyWith(
-                                      fontSize: desktopSize(16.sp, 16),
+                                      fontSize: desktopSize(size(mobile: 16.sp, tablet: 14.sp), 16),
                                       fontWeight: FontWeight.w500,
                                       color: context.colorScheme.onPrimary
                                           .withOpacity(.4)),
                                 ),
                                 Icon(
                                   Icons.date_range_rounded,
-                                  size: desktopSize(30.sp, 30),
+                                  size: desktopSize(size(mobile: 30.sp, tablet: 25.sp), 30),
                                   color: context.colorScheme.primary,
                                 )
                               ],
@@ -459,7 +459,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
                           onPressed: onClick,
                           style: ButtonStyle(
                               minimumSize: WidgetStatePropertyAll(
-                                  Size(double.infinity, desktopSize(50.w, 60))),
+                                  Size(double.infinity, desktopSize(size(mobile: 50.w, tablet: 35.w), 60))),
                               backgroundColor: WidgetStatePropertyAll(
                                   context.colorScheme.primary),
                               shape: WidgetStatePropertyAll(
@@ -471,7 +471,7 @@ class _AddNewTaskViewState extends State<AddNewTaskView> with AfterLayout {
                                 ? Translation.add_task.tr
                                 : Translation.update.tr,
                             style: context.small.copyWith(
-                                fontSize: desktopSize(20.sp, 20),
+                                fontSize: desktopSize(size(mobile: 20.sp, tablet: 15.sp), 20),
                                 fontWeight: FontWeight.w700,
                                 color:
                                     context.theme.colorScheme.onPrimaryContainer),
