@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:todo_task/app/app_preferences.dart';
 import 'package:todo_task/app/dependency_injection.dart';
 import 'package:todo_task/data/responses/responses.dart';
+import 'package:todo_task/domain/model/models.dart';
 
 import '../request/request.dart';
 import 'dio_factory.dart';
@@ -24,6 +25,12 @@ abstract class AppServicesClientAbs {
   Future<String> refreshToken();
 
   Future<TaskDetailsResponse> updateTask(UpdateTaskRequest request);
+
+  Future<TaskDetailsResponse> getTaskById(String id);
+
+  Future<ProfileDetailsResponse> getProfileDetails();
+
+
 }
 
 class AppServices implements AppServicesClientAbs {
@@ -139,5 +146,19 @@ class AppServices implements AppServicesClientAbs {
         method: RequestMethod.PUT, body: body);
 
     return TaskDetailsResponse.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  @override
+  Future<TaskDetailsResponse> getTaskById(String id) async {
+    Response response =
+        await _dio.request("todos/$id", method: RequestMethod.GET);
+    return TaskDetailsResponse.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  @override
+  Future<ProfileDetailsResponse> getProfileDetails() async {
+    Response response =
+        await _dio.request("auth/profile", method: RequestMethod.GET);
+    return ProfileDetailsResponse.fromJson(response.data as Map<String, dynamic>);
   }
 }

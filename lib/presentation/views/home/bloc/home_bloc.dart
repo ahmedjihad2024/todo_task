@@ -11,7 +11,9 @@ import 'package:todo_task/app/user_messages.dart';
 import 'package:todo_task/data/repository/repository_impl.dart';
 import 'package:todo_task/domain/model/models.dart';
 import 'package:todo_task/domain/usecase/delete_task_usecase.dart';
+import 'package:todo_task/domain/usecase/get_task_by_id_usecase.dart';
 import 'package:todo_task/domain/usecase/get_todos_usecase.dart';
+import 'package:todo_task/presentation/common/overlay_loading.dart';
 
 import '../../../../data/network/error_handler/failure.dart';
 import '../../../common/state_render.dart';
@@ -24,6 +26,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final Repository _repository;
   late GetTodosUsecase _getTodosUsecase;
   late DeleteTaskUsecase _deleteTaskUsecase;
+  late GetTaskByIdUsecase _getTaskByIdUsecase;
+
   int page = 1;
   TaskState _filter = TaskState.all;
   List<TaskDetails> _groupOfTaskDetails = [];
@@ -36,9 +40,24 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeDeleteTaskEvent>(_deleteTask);
     on<ApplyFilterEvent>(_applyFilterEvent);
     on<LogoutEvent>(_logout);
+    on<CloseStreams>(_closeStreams);
+
+    on<GetTaskById>(_getTaskById);
 
     _getTodosUsecase = GetTodosUsecase(_repository);
     _deleteTaskUsecase = DeleteTaskUsecase(_repository);
+    _getTaskByIdUsecase = GetTaskByIdUsecase(_repository);
+  }
+
+  var _toastController = StreamController<String>();
+  var _qrResultController = StreamController<TaskDetails>();
+  Stream<String> toastStream(){
+    if(_toastController.isClosed) _toastController = StreamController<String>();
+    return _toastController.stream;
+  }
+  Stream<TaskDetails> qrResult() {
+    if(_qrResultController.isClosed) _qrResultController = StreamController<TaskDetails>();
+   return _qrResultController.stream;
   }
 
   FutureOr<void> _refreshTasks(
@@ -69,10 +88,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     result.fold((left) {
       event.refreshController.loadFailed();
-      emit(state.copy(
-          reqState: ReqState.toastError, errorMessage: left.userMessage));
+      _toastController.add(left.userMessage);
     }, (right) {
-      if (right.tasksGroup.isEmpty && state.tasksGroup.isEmpty) {
+      if (right.tasksGroup.isEmpty && _groupOfTaskDetails.isEmpty) {
         emit(state.copy(reqState: ReqState.empty, errorMessage: "No tasks"));
       } else if (right.tasksGroup.isEmpty) {
         event.refreshController.loadNoData();
@@ -99,12 +117,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> _updateTask(
       HomeUpdateTaskEvent event, Emitter<HomeState> emit) async {
     int index = state.tasksGroup.indexWhere((e) => e.id == event.taskDetails.id);
-    var newGroup =
-    _groupOfTaskDetails.where((e) => e.id != event.taskDetails.id).toList()..insert(index, event.taskDetails);
-    emit(state.copy(
-        reqState: ReqState.success,
-        tasksGroup: filterTasks(newGroup, _filter)));
-    _groupOfTaskDetails = newGroup;
+    if(index != -1){
+      var newGroup =
+      _groupOfTaskDetails.where((e) => e.id != event.taskDetails.id).toList()..insert(index, event.taskDetails);
+      emit(state.copy(
+          reqState: ReqState.success,
+          tasksGroup: filterTasks(newGroup, _filter)));
+      _groupOfTaskDetails = newGroup;
+    }
   }
 
   FutureOr<void> _deleteTask(
@@ -139,7 +159,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     _filter = event.state;
     emit(
       state.copy(
-        reqState: ReqState.success,
         tasksGroup: filterTasks(_groupOfTaskDetails, _filter)
       )
     );
@@ -149,5 +168,31 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       LogoutEvent event, Emitter<HomeState> emit) async {
     await instance<AppPreferences>().clearAllTokens();
     event.onLogout();
+    _groupOfTaskDetails = [];
+    _filter = TaskState.all;
+  }
+
+  FutureOr<void> _getTaskById(GetTaskById event, Emitter<HomeState> emit) async {
+
+    event.overlayLoading.showLoading();
+
+    Either<Failure, TaskDetails> result = await _getTaskByIdUsecase.execute(event.id);
+
+    result.fold((left) {
+      event.overlayLoading.hideLoading();
+      _toastController.add(left.userMessage);
+    }, (right) {
+      event.overlayLoading.hideLoading();
+      _qrResultController.add(right);
+    });
+
+  }
+
+
+
+
+  FutureOr<void> _closeStreams(CloseStreams event, Emitter<HomeState> emit) async {
+    await  _toastController.close();
+    await _qrResultController.close();
   }
 }

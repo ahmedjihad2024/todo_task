@@ -103,5 +103,34 @@ class Repository implements RepositoryAbs{
       return const Left(NoInternetConnection());
     }
   }
+
+  @override
+  Future<Either<Failure, TaskDetails>> getTaskById(String id) async {
+    if(await _networkConnectivity.isConnected){
+      try{
+        var response = await _dataSource.getTaskById(id);
+        return Right(response.toDomain);
+      }on Exception catch(e){
+        return Left(e.handle);
+      }
+    }else{
+      return const Left(NoInternetConnection());
+    }
+  }
+
+  @override
+  Future<Either<Failure, ProfileDetails>> getProfileDetails() async {
+    if(await _networkConnectivity.isConnected){
+      try{
+        var response = await _dataSource.getProfileDetails();
+        return Right(response.toDomain);
+      }on Exception catch(e){
+        return Left(e.handle);
+      }
+    }else{
+      return const Left(NoInternetConnection());
+    }
+  }
+
 }
 

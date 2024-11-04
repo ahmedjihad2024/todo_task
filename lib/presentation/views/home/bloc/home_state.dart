@@ -11,12 +11,12 @@ class HomeState{
   HomeState copy({
     ReqState? reqState,
     String? errorMessage,
-    List<TaskDetails>? tasksGroup
+    List<TaskDetails>? tasksGroup,
   }) {
     return HomeState(
         reqState: reqState ?? this.reqState,
         errorMessage: errorMessage ?? this.errorMessage,
-      tasksGroup: tasksGroup ?? this.tasksGroup
+      tasksGroup: tasksGroup ?? this.tasksGroup,
     );
   }
 }

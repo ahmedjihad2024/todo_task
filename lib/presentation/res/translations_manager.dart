@@ -46,7 +46,8 @@ enum Translation{
   edit,
   update_task,
   update,
-  task_details
+  task_details,
+  profile_details
 }
 
 extension Tra on Translation{

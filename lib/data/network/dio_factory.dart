@@ -54,8 +54,8 @@ class DioFactory {
           e.requestOptions.headers['Authorization'] = "Bearer $newAccessToken";
           if (e.requestOptions.headers['Content-Type']
               ?.startsWith('multipart/form-data')) {
-            FormData newFormData = FormData.fromMap(e.requestOptions.data);
-            e.requestOptions.data = newFormData;
+            // FormData newFormData = FormData.fromMap(e.requestOptions.data).clone();
+            e.requestOptions.data = (e.requestOptions.data as FormData).clone();
           }
           return handler.resolve(await _dio.fetch(e.requestOptions));
         } catch (error) {

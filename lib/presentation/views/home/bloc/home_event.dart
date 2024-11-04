@@ -35,3 +35,11 @@ class LogoutEvent extends HomeEvent{
   final Function() onLogout;
   LogoutEvent(this.onLogout);
 }
+
+class GetTaskById extends HomeEvent {
+  final String id;
+  final OverlayLoading overlayLoading;
+  GetTaskById(this.id, this.overlayLoading);
+}
+
+class CloseStreams extends HomeEvent{}

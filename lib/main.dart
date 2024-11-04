@@ -11,6 +11,7 @@ import 'app/app.dart';
 import 'app/dependency_injection.dart';
 import 'presentation/views/home/bloc/home_bloc.dart';
 
+// 223546
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
@@ -39,6 +40,7 @@ void main() async {
       backgroundColor: Colors.transparent,
       alwaysOnTop: true,
       skipTaskbar: true,
+      title: "Tasky",
       titleBarStyle: TitleBarStyle.hidden,
     );
 

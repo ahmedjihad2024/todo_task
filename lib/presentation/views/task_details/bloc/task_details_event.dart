@@ -9,3 +9,8 @@ class UpdateTaskEvent extends TaskDetailsEvent{
 
   UpdateTaskEvent({required this.id, required this.status});
 }
+
+class SaveQrAsImage extends TaskDetailsEvent{
+  final CaptureController controller;
+  SaveQrAsImage(this.controller);
+}

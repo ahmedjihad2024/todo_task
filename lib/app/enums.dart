@@ -1,4 +1,10 @@
-enum ExperienceLevel { fresh, junior, midLevel, senior }
+enum ExperienceLevel { fresh, junior, midLevel, senior ;
+  static ExperienceLevel? from(String name) {
+    for (ExperienceLevel value in values) {
+      if (value.name == name) return value;
+    }
+    return null;
+  }}
 
 enum TaskState {
   all,

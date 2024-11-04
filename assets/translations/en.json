@@ -42,6 +42,7 @@
   "edit" : "Edit",
   "update_task" : "Update task",
   "update": "Update",
-  "task_details": "Task details"
+  "task_details": "Task details",
+  "profile_details": "Profile details"
 
 }

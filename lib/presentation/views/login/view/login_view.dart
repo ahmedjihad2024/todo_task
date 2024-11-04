@@ -13,6 +13,7 @@ import 'package:todo_task/presentation/common/phone_form.dart';
 import 'package:todo_task/presentation/views/login/bloc/login_bloc.dart';
 import 'package:todo_task/presentation/views/login/view/widgets/login_phone_style.dart';
 import 'package:todo_task/presentation/views/login/view/widgets/login_windows_style.dart';
+import 'package:window_manager/window_manager.dart';
 
 import '../../../../app/phone_number_validator.dart';
 import '../../../common/overlay_loading.dart';
@@ -134,5 +135,7 @@ class _LoginViewState extends State<LoginView> with AfterLayout {
   @override
   Future<void> afterLayout(BuildContext context) async {
     overlayLoading = OverlayLoading(context);
+
+    if (Platform.isWindows) await windowManager.show();
   }
 }

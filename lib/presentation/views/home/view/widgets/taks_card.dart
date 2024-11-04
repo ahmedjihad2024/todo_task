@@ -21,11 +21,16 @@ class TaskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed(RoutesManager.taskDetails.route, arguments: details);
+        Navigator.of(context)
+            .pushNamed(RoutesManager.taskDetails.route, arguments: details);
       },
       child: Container(
-        padding: EdgeInsets.only(left: 20.w, right: 10.w, top: 10.w, bottom: 10.w),
-        height: 110.w,
+        padding: EdgeInsets.only(
+            left: desktopSize(20.w, 20),
+            right: desktopSize(10.w, 10),
+            top: desktopSize(10.w, 10),
+            bottom: desktopSize(10.w, 10)),
+        height: desktopSize(110.w, 120),
         alignment: Alignment.center,
         child: Row(
           children: [
@@ -34,12 +39,14 @@ class TaskCard extends StatelessWidget {
               clipBehavior: Clip.hardEdge,
               child: CachedNetworkImage(
                 imageUrl: "${Constants.baseUrl}images/${details.image}",
-                width: 80.w,
-                height: 80.w,
+                width: desktopSize(80.w, 85),
+                height: desktopSize(80.w, 85),
                 fit: BoxFit.cover,
               ),
             ),
-            10.horizontalSpace,
+            SizedBox(
+              width: desktopSize(10.w, 15),
+            ),
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -51,7 +58,7 @@ class TaskCard extends StatelessWidget {
                         child: Text(
                           details.title,
                           style: context.small.copyWith(
-                              fontSize: 22.sp,
+                              fontSize: desktopSize(22.sp, 22),
                               height: 1,
                               color: context.colorScheme.onPrimary,
                               overflow: TextOverflow.ellipsis,
@@ -60,7 +67,7 @@ class TaskCard extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.all(4.w),
+                        padding: EdgeInsets.all(desktopSize(4.w, 5)),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(7.r),
                             color: getTaskStateColor(details.status)
@@ -68,7 +75,7 @@ class TaskCard extends StatelessWidget {
                         child: Text(
                           getTaskStateText(details.status),
                           style: context.small.copyWith(
-                              fontSize: 14.sp,
+                              fontSize: desktopSize(14.sp, 14),
                               height: 1,
                               color: getTaskStateColor(details.status),
                               fontWeight: FontWeight.w500),
@@ -77,19 +84,23 @@ class TaskCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  5.verticalSpace,
+                  SizedBox(
+                    height: desktopSize(5.w, 5),
+                  ),
                   Text(
                     details.description.split("\n").first,
                     softWrap: false,
                     style: context.small.copyWith(
-                        fontSize: 17.sp,
+                        fontSize: desktopSize(17.sp, 17),
                         height: 1,
                         color: context.colorScheme.onPrimary.withOpacity(.3),
                         overflow: TextOverflow.ellipsis,
                         fontWeight: FontWeight.w400),
                     overflow: TextOverflow.ellipsis,
                   ),
-                  5.verticalSpace,
+                  SizedBox(
+                    height: desktopSize(5.w, 5),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -98,14 +109,16 @@ class TaskCard extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.flag_outlined,
-                            size: 25.sp,
+                            size: desktopSize(25.sp, 25),
                             color: getTaskPriorityColor(details.priority),
                           ),
-                          5.horizontalSpace,
+                          SizedBox(
+                            width: desktopSize(5.w, 5),
+                          ),
                           Text(
                             getPriorityText(details.priority),
                             style: context.small.copyWith(
-                                fontSize: 14.sp,
+                                fontSize: desktopSize(14.sp, 14),
                                 color: getTaskPriorityColor(details.priority),
                                 fontWeight: FontWeight.w500),
                           ),
@@ -115,7 +128,7 @@ class TaskCard extends StatelessWidget {
                         DateFormat("yyyy-MM-dd", context.locale.languageCode)
                             .format(details.createdAt),
                         style: context.small.copyWith(
-                            fontSize: 14.sp,
+                            fontSize: desktopSize(14.sp, 14),
                             color:
                                 context.colorScheme.onPrimary.withOpacity(.3),
                             fontWeight: FontWeight.w500),
@@ -129,21 +142,21 @@ class TaskCard extends StatelessWidget {
               children: [
                 PopupMenuButton<String>(
                   onSelected: (String item) {
-                    if(item == "1"){
+                    if (item == "1") {
                       // edit
-                      Navigator.of(context).pushNamed(RoutesManager.addNewTask.route, arguments: {
-                        'new-task': false,
-                        "details": details
-                      });
-                    }else{
+                      Navigator.of(context).pushNamed(
+                          RoutesManager.addNewTask.route,
+                          arguments: {'new-task': false, "details": details});
+                    } else {
                       // 2 - delete
-                      context.read<HomeBloc>().add(HomeDeleteTaskEvent(details));
+                      context
+                          .read<HomeBloc>()
+                          .add(HomeDeleteTaskEvent(details));
                     }
                   },
                   elevation: 10,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.r)
-                  ),
+                      borderRadius: BorderRadius.circular(10.r)),
                   itemBuilder: (BuildContext context) {
                     return [
                       PopupMenuItem<String>(
@@ -151,7 +164,7 @@ class TaskCard extends StatelessWidget {
                         child: Text(
                           Translation.edit.tr,
                           style: context.small.copyWith(
-                              fontSize: 17.sp,
+                              fontSize: desktopSize(17.sp, 17),
                               color: context.colorScheme.onPrimary,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.w400),
@@ -162,7 +175,7 @@ class TaskCard extends StatelessWidget {
                         child: Text(
                           Translation.delete.tr,
                           style: context.small.copyWith(
-                              fontSize: 17.sp,
+                              fontSize: desktopSize(17.sp, 17),
                               color: context.colorScheme.onPrimary,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.w400),

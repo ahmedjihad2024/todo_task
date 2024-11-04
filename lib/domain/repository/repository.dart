@@ -13,4 +13,6 @@ abstract class RepositoryAbs{
   Future<Either<Failure, Tasks>> getTodos(int page);
   Future<Either<Failure, void>> deleteTask(String id);
   Future<Either<Failure, TaskDetails>> updateTask(UpdateTaskRequest request);
+  Future<Either<Failure, TaskDetails>> getTaskById(String id);
+  Future<Either<Failure, ProfileDetails>> getProfileDetails();
 }

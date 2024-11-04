@@ -26,7 +26,6 @@ class SignUpPhoneStyle extends StatelessWidget {
   final FocusNode addressFocus;
   final String? selectedExperienceLevel;
   final int? selectedYearExperience;
-  final OverlayLoading overlayLoading;
   final Function(String code) onCountryCodeChnage;
   final Function(String? level) onSelectingExperienceLevel;
   final Function(int? years) onSelectingExperienceYears;
@@ -46,7 +45,6 @@ class SignUpPhoneStyle extends StatelessWidget {
     required this.nameFocus,
     required this.onCountryCodeChnage,
     required this.onClick,
-    required this.overlayLoading,
     required this.onSelectingExperienceLevel,
     required this.onSelectingExperienceYears
   });

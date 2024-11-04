@@ -8,6 +8,7 @@ import 'package:todo_task/data/network/internet_checker.dart';
 import 'package:todo_task/data/repository/repository_impl.dart';
 import 'package:todo_task/presentation/views/home/bloc/home_bloc.dart';
 import 'package:todo_task/presentation/views/login/bloc/login_bloc.dart';
+import 'package:todo_task/presentation/views/profile/bloc/profile_bloc.dart';
 import 'package:todo_task/presentation/views/sign_up/bloc/sign_up_bloc.dart';
 
 import '../presentation/views/add_new_task/bloc/add_new_task_bloc.dart';
@@ -35,5 +36,6 @@ Future initAppModules() async {
   instance.registerFactory<SignUpBloc>(()=> SignUpBloc(instance<Repository>()));
   instance.registerFactory<AddNewTaskBloc>(()=> AddNewTaskBloc(instance<Repository>()));
   instance.registerFactory<TaskDetailsBloc>(()=> TaskDetailsBloc(instance<Repository>()));
+  instance.registerFactory<ProfileBloc>(()=> ProfileBloc(instance<Repository>()));
   // **
 }

@@ -10,6 +10,8 @@ abstract class DataSourceAbs{
   Future<TasksResponse> getTodos(int page);
   Future<void> deleteTask(String id);
   Future<TaskDetailsResponse> updateTask(UpdateTaskRequest request);
+  Future<TaskDetailsResponse> getTaskById(String id);
+  Future<ProfileDetailsResponse> getProfileDetails();
 }
 
 class DataSource implements DataSourceAbs{
@@ -34,4 +36,10 @@ class DataSource implements DataSourceAbs{
 
   @override
   Future<TaskDetailsResponse> updateTask(UpdateTaskRequest request) async => await appServices.updateTask(request);
+
+  @override
+  Future<TaskDetailsResponse> getTaskById(String id) async => await appServices.getTaskById(id);
+
+  @override
+  Future<ProfileDetailsResponse> getProfileDetails() async => await appServices.getProfileDetails();
 }

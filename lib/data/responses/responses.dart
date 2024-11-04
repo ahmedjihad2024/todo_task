@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-
+import 'package:todo_task/app/enums.dart';
 
 class RegisterDetailsResponse {
   final String? id;
@@ -9,9 +9,9 @@ class RegisterDetailsResponse {
 
   const RegisterDetailsResponse(
       {required this.id,
-        required this.userName,
-        required this.accessToken,
-        required this.refreshToken});
+      required this.userName,
+      required this.accessToken,
+      required this.refreshToken});
 
   factory RegisterDetailsResponse.fromJson(Map<String, dynamic> json) {
     return RegisterDetailsResponse(
@@ -22,8 +22,9 @@ class RegisterDetailsResponse {
   }
 }
 
-class UploadedImageResponse{
+class UploadedImageResponse {
   final String image;
+
   UploadedImageResponse(this.image);
 
   factory UploadedImageResponse.fromJson(Map<String, dynamic> json) {
@@ -31,7 +32,7 @@ class UploadedImageResponse{
   }
 }
 
-class TaskDetailsResponse{
+class TaskDetailsResponse {
   final String? id;
   final String? image;
   final String? title;
@@ -44,18 +45,18 @@ class TaskDetailsResponse{
 
   TaskDetailsResponse(
       {required this.image,
-        required this.priority,
-        required this.description,
-        required this.title,
-        required this.user,
-        required this.status,
-        required this.createdAt,
-        required this.updatedAt,
+      required this.priority,
+      required this.description,
+      required this.title,
+      required this.user,
+      required this.status,
+      required this.createdAt,
+      required this.updatedAt,
       required this.id});
 
   factory TaskDetailsResponse.fromJson(Map<String, dynamic> json) {
     return TaskDetailsResponse(
-      id: json["_id"],
+        id: json["_id"],
         image: json["image"],
         title: json["title"],
         status: json["status"],
@@ -67,17 +68,40 @@ class TaskDetailsResponse{
   }
 }
 
-class TasksResponse{
+class TasksResponse {
   List<TaskDetailsResponse> tasksGroup;
-  TasksResponse({
-    required this.tasksGroup
-});
 
-  factory TasksResponse.fromList(List<dynamic> data){
+  TasksResponse({required this.tasksGroup});
+
+  factory TasksResponse.fromList(List<dynamic> data) {
     List<TaskDetailsResponse> group = [];
-    for(Map<String, dynamic> item in data){
+    for (Map<String, dynamic> item in data) {
       group.add(TaskDetailsResponse.fromJson(item));
     }
     return TasksResponse(tasksGroup: group);
+  }
+}
+
+class ProfileDetailsResponse {
+  final String name;
+  final String phone;
+  final String address;
+  final int yearsExperience;
+  final String level;
+
+  ProfileDetailsResponse(
+      {required this.name,
+      required this.phone,
+      required this.address,
+      required this.level,
+      required this.yearsExperience});
+
+  factory ProfileDetailsResponse.fromJson(Map<String, dynamic> json) {
+    return ProfileDetailsResponse(
+        name: json["displayName"],
+        phone: json["username"],
+        address: json["address"],
+        level: json["level"],
+        yearsExperience: json["experienceYears"]);
   }
 }

@@ -25,8 +25,16 @@ extension TaskDetailsMapper on TaskDetailsResponse {
       updatedAt: DateTime.parse(updatedAt.orEmpty));
 }
 
-extension TasksMapper on TasksResponse{
-  Tasks get toDomain => Tasks(
-      tasksGroup: tasksGroup.map((e) => e.toDomain).toList()
-  );
+extension TasksMapper on TasksResponse {
+  Tasks get toDomain =>
+      Tasks(tasksGroup: tasksGroup.map((e) => e.toDomain).toList());
+}
+
+extension ProfileDetailsMapper on ProfileDetailsResponse {
+  ProfileDetails get toDomain => ProfileDetails(
+      name: name,
+      phone: phone,
+      address: address,
+      level: ExperienceLevel.from(level)!,
+      yearsExperience: yearsExperience);
 }

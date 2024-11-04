@@ -1,4 +1,5 @@
-import 'dart:io';
+
+import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,15 @@ class MyAppState extends State<MyApp> {
         builder: (context, details) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
+            scrollBehavior: const MaterialScrollBehavior().copyWith(
+              dragDevices: {
+                /*Add this*/
+                PointerDeviceKind.mouse,
+                PointerDeviceKind.touch,
+                PointerDeviceKind.stylus,
+                PointerDeviceKind.unknown,
+              },
+            ),
             initialRoute: RoutesManager.splash.route,
             theme: ThemeManager.lightTheme,
             themeMode: _themeMode,

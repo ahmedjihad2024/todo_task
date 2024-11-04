@@ -157,7 +157,6 @@ class _SignUpViewState extends State<SignUpView> with AfterLayout{
                     });
                   },
                   onClick: onClick,
-                  overlayLoading: overlayLoading,
                   onSelectingExperienceLevel: (String? level) {
                     setState(() {
                       selectedExperienceLevel = level;
@@ -187,7 +186,6 @@ class _SignUpViewState extends State<SignUpView> with AfterLayout{
                     });
                   },
                   onClick: onClick,
-                  overlayLoading: overlayLoading,
                   onSelectingExperienceLevel: (String? level) {
                     setState(() {
                       selectedExperienceLevel = level;

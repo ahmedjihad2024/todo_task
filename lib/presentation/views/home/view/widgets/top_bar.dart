@@ -1,5 +1,7 @@
 
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:responsive_ui/responsive_ui.dart';
 import 'package:todo_task/app/extensions.dart';
@@ -29,33 +31,38 @@ class _TopBarState extends State<TopBar> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: Platform.isWindows ? MainAxisAlignment.start :  MainAxisAlignment.spaceBetween,
       children: [
         ...TaskState.values.map((item) {
-          return TextButton(
-              onPressed: () {
-                setState(() {
-                  selectedState = item;
-                  widget.onSelectedTap(item);
-                });
-              },
-              style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(
-                      item == selectedState ? context.colorScheme.primary : context.colorScheme.onPrimary.withOpacity(.08)
-                  )
-              ),
-              child: Text(
-                getTaskStateText(item),
-                style: context.small.copyWith(
-                  fontSize: 16.sp,
-                  color: item == selectedState
-                      ? context.colorScheme.onPrimaryContainer
-                      : context.colorScheme.onPrimary.withOpacity(.5),
-                  fontWeight: item == selectedState
-                      ? FontWeight.w700
-                      : FontWeight.w400,
+          return Padding(
+            padding: EdgeInsets.only(
+              right: Platform.isWindows ? 8.0 : 0
+            ),
+            child: TextButton(
+                onPressed: () {
+                  setState(() {
+                    selectedState = item;
+                    widget.onSelectedTap(item);
+                  });
+                },
+                style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(
+                        item == selectedState ? context.colorScheme.primary : context.colorScheme.onPrimary.withOpacity(.08)
+                    )
                 ),
-              ));
+                child: Text(
+                  getTaskStateText(item),
+                  style: context.small.copyWith(
+                    fontSize: desktopSize(16.sp, 16),
+                    color: item == selectedState
+                        ? context.colorScheme.onPrimaryContainer
+                        : context.colorScheme.onPrimary.withOpacity(.5),
+                    fontWeight: item == selectedState
+                        ? FontWeight.w700
+                        : FontWeight.w400,
+                  ),
+                )),
+          );
         })
       ],
     );
