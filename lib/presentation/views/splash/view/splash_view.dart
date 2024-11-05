@@ -42,12 +42,7 @@ class _SplashViewState extends State<SplashView> with AfterLayout {
           child: SvgPicture.asset(
         SvgManager.appName,
         // colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-        width: desktopSize(
-            size(
-              mobile: 150,
-              tablet: 150
-            ),
-            150),
+        width: 150,
       )),
     );
   }
