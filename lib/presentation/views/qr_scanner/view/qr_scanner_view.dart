@@ -1,13 +1,17 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
 import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:toastification/toastification.dart';
 import 'package:todo_task/app/extensions.dart';
 
 import '../../../common/after_layout.dart';
+import '../../../common/toast.dart';
 import '../../../common/windows_qr_scanner.dart';
 
 class QrScannerView extends StatefulWidget {
@@ -20,7 +24,7 @@ class QrScannerView extends StatefulWidget {
 class _QrScannerViewState extends State<QrScannerView>
     with WidgetsBindingObserver {
   ValueNotifier<bool> cameraReady = ValueNotifier(false);
-  String? result;
+  String? code;
 
   Future<void> initCamera() async {
     // add this first before await WindowsQrScanner().initCamera();
@@ -30,13 +34,30 @@ class _QrScannerViewState extends State<QrScannerView>
     });
 
     await WindowsQrScanner().initQrSdk();
-    await WindowsQrScanner().initCamera();
+    try{
+      await WindowsQrScanner().initCamera();
+    }on PlatformException catch(e){
+      showToast(
+          msg: 'Some thing wrong',
+          type: ToastificationType.warning
+      , context: context);
+      Navigator.of(context).pop();
+    }on CameraException catch(e){
+      showToast(
+          msg: e.description ?? 'Some thing wrong',
+          type: ToastificationType.warning
+          , context: context);
+      Navigator.of(context).pop();
+    }catch(e){
+      Navigator.of(context).pop();
+    }
 
     WindowsQrScanner().onCameraClosed((value) {
       print("Camera Closed");
       try {
         cameraReady.value = false;
       } catch (e) {}
+      Navigator.of(context).pop(code);
     });
 
     WindowsQrScanner().onCameraError((value) async {
@@ -47,8 +68,8 @@ class _QrScannerViewState extends State<QrScannerView>
 
     WindowsQrScanner().onResult((value) async {
       if (value.isNotEmpty) {
+        code = value.first.text;
         await WindowsQrScanner().dispose();
-        Navigator.of(context).pop(value.first.text);
       }
     });
   }
@@ -58,10 +79,10 @@ class _QrScannerViewState extends State<QrScannerView>
         await FilePicker.platform.pickFiles(type: FileType.image);
 
     if(result != null){
-      await WindowsQrScanner().dispose();
       var res = await WindowsQrScanner().scanImageFile(result.files.first.path!);
-      if(res != null  && res.isNotEmpty){
-        Navigator.of(context).pop(res.first.text);
+      if(res != null && res.isNotEmpty){
+        code = res.first.text;
+        await WindowsQrScanner().dispose();
       }
     }
   }
@@ -103,7 +124,6 @@ class _QrScannerViewState extends State<QrScannerView>
                               TextButton(
                                 onPressed: () async {
                                   await WindowsQrScanner().dispose();
-                                  Navigator.of(context).pop();
                                 },
                                 style: ButtonStyle(
                                     minimumSize: const WidgetStatePropertyAll(

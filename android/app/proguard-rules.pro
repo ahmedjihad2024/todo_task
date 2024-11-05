@@ -1,1 +1,3 @@
 -keep class androidx.lifecycle.DefaultLifecycleObserver
+-keep class com.dynamsoft.** { *; }
+-dontwarn com.dynamsoft.**

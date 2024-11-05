@@ -14,4 +14,5 @@ class ImagesManager{
   static const String _imagesPath = "assets/images";
   static const String art = "$_imagesPath/art.png";
   static const String art2 = "$_imagesPath/art_2.png";
+  static const String icon = "$_imagesPath/icon.png";
 }

@@ -1,13 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:camera_windows/camera_windows.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_sdk/dynamsoft_barcode.dart';
 import 'package:flutter_barcode_sdk/flutter_barcode_sdk.dart';
-import 'package:image/image.dart' as img;
 import 'package:camera_platform_interface/camera_platform_interface.dart';
-import 'dart:io' as io;
-import 'dart:ui' as ui;
 
 
 class WindowsQrScanner {
@@ -46,23 +43,22 @@ class WindowsQrScanner {
 
   Future<void> initQrSdk() async {
     if (_barcodeReader == null) {
-      _barcodeReader = FlutterBarcodeSdk();
-      await _barcodeReader!.setLicense(
+      _barcodeReader = Platform.isWindows ? FlutterBarcodeSdk() : null;
+      await _barcodeReader?.setLicense(
           'DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAzMzcxNTUxLVRYbFFjbTlxIiwibWFpblNlcnZlclVSTCI6Imh0dHBzOi8vbWRscy5keW5hbXNvZnRvbmxpbmUuY29tIiwib3JnYW5pemF0aW9uSUQiOiIxMDMzNzE1NTEiLCJzdGFuZGJ5U2VydmVyVVJMIjoiaHR0cHM6Ly9zZGxzLmR5bmFtc29mdG9ubGluZS5jb20iLCJjaGVja0NvZGUiOi0xNDAzMzcxMDA3fQ==');
-      await _barcodeReader!.init();
-      await _barcodeReader!.setBarcodeFormats(BarcodeFormat.QR_CODE);
+      await _barcodeReader?.init();
+      await _barcodeReader?.setBarcodeFormats(BarcodeFormat.QR_CODE);
     }
   }
 
   Future<void> initCamera() async {
-    try {
       _cameras = await CameraPlatform.instance.availableCameras();
+      if(_cameras.isEmpty) throw CameraException("-1", "No available camera");
       _cameraNames.clear();
       for (CameraDescription description in _cameras) {
         _cameraNames.add(description.name);
       }
       _selectedItem = _cameraNames[0];
-    } on PlatformException catch (e) {}
 
     await _toggleCamera(0);
   }
@@ -123,7 +119,7 @@ class WindowsQrScanner {
           await CameraPlatform.instance.dispose(cameraId);
         }
       } on CameraException catch (e) {
-        debugPrint('Failed to dispose camera: ${e.code}: ${e.description}');
+        CameraException("", 'Failed to dispose camera: ${e.code}: ${e.description}');
       }
 
       // Reset state.
