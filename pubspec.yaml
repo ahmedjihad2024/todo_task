@@ -70,7 +70,7 @@ dependencies:
   camera_windows:
     git:
       url: https://github.com/yushulx/flutter_camera_windows.git
-#  flutter_barcode_sdk: ^2.2.8
+  flutter_barcode_sdk: ^2.2.8
   camera_platform_interface: ^2.8.0
   # [nice_text_form] a custom library the have a button for a country code picker
   nice_text_form:

@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   camera_windows
   file_selector_windows
+  flutter_barcode_sdk
   permission_handler_windows
   screen_retriever_windows
   window_manager

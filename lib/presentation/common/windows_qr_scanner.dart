@@ -2,17 +2,16 @@ import 'dart:async';
 import 'package:camera_windows/camera_windows.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-// import 'package:flutter_barcode_sdk/dynamsoft_barcode.dart';
-// import 'package:flutter_barcode_sdk/flutter_barcode_sdk.dart';
+import 'package:flutter_barcode_sdk/dynamsoft_barcode.dart';
+import 'package:flutter_barcode_sdk/flutter_barcode_sdk.dart';
 import 'package:image/image.dart' as img;
 import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'dart:io' as io;
 import 'dart:ui' as ui;
 
-class BarcodeResult{}
 
 class WindowsQrScanner {
-  // static FlutterBarcodeSdk? _barcodeReader;
+  static FlutterBarcodeSdk? _barcodeReader;
   List<CameraDescription> _cameras = <CameraDescription>[];
   String _selectedItem = '';
   final List<String> _cameraNames = [];
@@ -46,13 +45,13 @@ class WindowsQrScanner {
   }
 
   Future<void> initQrSdk() async {
-    // if (_barcodeReader == null) {
-    //   _barcodeReader = FlutterBarcodeSdk();
-    //   await _barcodeReader!.setLicense(
-    //       'DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAzMzcxNTUxLVRYbFFjbTlxIiwibWFpblNlcnZlclVSTCI6Imh0dHBzOi8vbWRscy5keW5hbXNvZnRvbmxpbmUuY29tIiwib3JnYW5pemF0aW9uSUQiOiIxMDMzNzE1NTEiLCJzdGFuZGJ5U2VydmVyVVJMIjoiaHR0cHM6Ly9zZGxzLmR5bmFtc29mdG9ubGluZS5jb20iLCJjaGVja0NvZGUiOi0xNDAzMzcxMDA3fQ==');
-    //   await _barcodeReader!.init();
-    //   await _barcodeReader!.setBarcodeFormats(BarcodeFormat.QR_CODE);
-    // }
+    if (_barcodeReader == null) {
+      _barcodeReader = FlutterBarcodeSdk();
+      await _barcodeReader!.setLicense(
+          'DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAzMzcxNTUxLVRYbFFjbTlxIiwibWFpblNlcnZlclVSTCI6Imh0dHBzOi8vbWRscy5keW5hbXNvZnRvbmxpbmUuY29tIiwib3JnYW5pemF0aW9uSUQiOiIxMDMzNzE1NTEiLCJzdGFuZGJ5U2VydmVyVVJMIjoiaHR0cHM6Ly9zZGxzLmR5bmFtc29mdG9ubGluZS5jb20iLCJjaGVja0NvZGUiOi0xNDAzMzcxMDA3fQ==');
+      await _barcodeReader!.init();
+      await _barcodeReader!.setBarcodeFormats(BarcodeFormat.QR_CODE);
+    }
   }
 
   Future<void> initCamera() async {
@@ -158,27 +157,27 @@ class WindowsQrScanner {
       // _isScanAvailable = true;
       // // print("*************");
 
-      // _barcodeReader
-      //     ?.decodeImageBuffer(
-      //     data,
-      //     _previewSize!.width.toInt(),
-      //     _previewSize!.height.toInt(),
-      //     _previewSize!.width.toInt() * 4,
-      //     ImagePixelFormat.IPF_ARGB_8888.index)
-      //     .then((results) {
-      //   _results = results;
-      //
-      //   _onResultUser?.call(results);
-      //
-      //   _isScanAvailable = true;
-      // }).catchError((error) {
-      //   _isScanAvailable = true;
-      //   print(error);
-      // });
+      _barcodeReader
+          ?.decodeImageBuffer(
+          data,
+          _previewSize!.width.toInt(),
+          _previewSize!.height.toInt(),
+          _previewSize!.width.toInt() * 4,
+          ImagePixelFormat.IPF_ARGB_8888.index)
+          .then((results) {
+        _results = results;
+
+        _onResultUser?.call(results);
+
+        _isScanAvailable = true;
+      }).catchError((error) {
+        _isScanAvailable = true;
+        print(error);
+      });
     }
   }
 
-  // Future<List<BarcodeResult>?> scanImageFile(String path) async => _barcodeReader?.decodeFile(path);
+  Future<List<BarcodeResult>?> scanImageFile(String path) async => _barcodeReader?.decodeFile(path);
 
   // Future<Result?> _qrCodeFromBytes(
   //     Uint8List bytes, int width, int height) async {
