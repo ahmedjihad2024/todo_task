@@ -48,7 +48,7 @@ class _QrScannerViewState extends State<QrScannerView>
     WindowsQrScanner().onResult((value) async {
       if (value.isNotEmpty) {
         await WindowsQrScanner().dispose();
-        Navigator.of(context).pop(value.first.text);
+        // Navigator.of(context).pop(value.first.text);
       }
     });
   }
@@ -57,13 +57,13 @@ class _QrScannerViewState extends State<QrScannerView>
     FilePickerResult? result =
         await FilePicker.platform.pickFiles(type: FileType.image);
 
-    if(result != null){
-      await WindowsQrScanner().dispose();
-      var res = await WindowsQrScanner().scanImageFile(result.files.first.path!);
-      if(res != null  && res.isNotEmpty){
-        Navigator.of(context).pop(res.first.text);
-      }
-    }
+    // if(result != null){
+    //   await WindowsQrScanner().dispose();
+    //   var res = await WindowsQrScanner().scanImageFile(result.files.first.path!);
+    //   if(res != null  && res.isNotEmpty){
+    //     Navigator.of(context).pop(res.first.text);
+    //   }
+    // }
   }
 
   @override

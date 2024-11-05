@@ -33,7 +33,6 @@ class MyAppState extends State<MyApp> {
             debugShowCheckedModeBanner: false,
             scrollBehavior: const MaterialScrollBehavior().copyWith(
               dragDevices: {
-                /*Add this*/
                 PointerDeviceKind.mouse,
                 PointerDeviceKind.touch,
                 PointerDeviceKind.stylus,
